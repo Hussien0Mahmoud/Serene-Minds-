@@ -1,0 +1,730 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "password": "hashed_password",
+      "role": "user",
+      "phone": "1234567890",
+      "profileImage": "https://ui-avatars.com/api/?name=John+Smith",
+      "dateJoined": "2024-01-15",
+      "therapistId": "1",
+      "appointmentHistory": [
+        "1"
+      ],
+      "progress": {
+        "lastVisit": "2024-04-24",
+        "totalSessions": 5,
+        "upcomingAppointments": [
+          "1"
+        ]
+      }
+    },
+    {
+      "id": "4a77",
+      "name": "gamal",
+      "email": "gamal@mail.com",
+      "phone": "01122334455",
+      "password": "123456",
+      "role": "admin",
+      "dateJoined": "2025-04-25T07:59:34.840Z",
+      "profileImage": "https://ui-avatars.com/api/?name=gamal"
+    },
+    {
+      "id": "1d51",
+      "name": "test",
+      "email": "test@mail.com",
+      "phone": "01234567891",
+      "password": "123456",
+      "role": "admin",
+      "dateJoined": "2025-04-25T13:28:50.253Z",
+      "profileImage": "https://ui-avatars.com/api/?name=test"
+    },
+    {
+      "id": "5923",
+      "name": "hossam",
+      "email": "hossam@mail.com",
+      "phone": "01126851783",
+      "password": "123456",
+      "role": "user",
+      "dateJoined": "2025-04-26T09:03:51.954Z",
+      "profileImage": "https://ui-avatars.com/api/?name=hossam"
+    }
+  ],
+  "therapists": [
+    {
+      "id": "1",
+      "name": "Dr. Sarah Williams",
+      "email": "sarah.williams@example.com",
+      "password": "doctor123",
+      "role": "therapist",
+      "specialty": "Clinical Psychologist test",
+      "image": "https://i.pravatar.cc/300?img=1",
+      "rating": 4.9,
+      "reviews": 124,
+      "experience": "17+ years",
+      "education": [
+        "Ph.D. in Clinical Psychology, Stanford University",
+        "M.A. in Psychology, Yale University",
+        "test for education"
+      ],
+      "specializations": [
+        "Anxiety",
+        "Depression",
+        "Stress Management",
+        "test"
+      ],
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "about": "Licensed clinical psychologist with 15+ years experience",
+      "price": 120,
+      "availability": true,
+      "schedule": {
+        "Monday": [
+          "14:00"
+        ],
+        "Tuesday": [
+          "09:00",
+          "10:00",
+          "11:00",
+          "14:00",
+          "15:00"
+        ],
+        "Wednesday": [
+          "10:00",
+          "11:00",
+          "14:00",
+          "15:00",
+          "16:00"
+        ],
+        "Thursday": [
+          "09:00",
+          "09:00",
+          "10:00",
+          "14:00"
+        ],
+        "Friday": [
+          "09:00",
+          "10:00",
+          "11:00",
+          "14:00"
+        ],
+        "Saturday": [
+          "10:00",
+          "11:00",
+          "12:00"
+        ],
+        "Sunday": []
+      }
+    },
+    {
+      "id": "8a37",
+      "name": "Dr. Mohamed Noor",
+      "email": "mohamed@mail.com",
+      "specialty": "Clinical Psychologist",
+      "experience": "100+ years",
+      "availability": true,
+      "price": 100,
+      "languages": [
+        "arabic",
+        "en",
+        "fr"
+      ],
+      "specializations": [
+        "depression",
+        "depression"
+      ],
+      "about": "about test information",
+      "education": [
+        "test education",
+        "test2 education"
+      ],
+      "image": "https://ui-avatars.com/api/?name=Mohamed Ahmed",
+      "password": "123456",
+      "rating": 0,
+      "reviews": 0,
+      "schedule": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [
+          "09:00",
+          "10:00",
+          "11:00"
+        ],
+        "Saturday": [],
+        "Sunday": []
+      }
+    },
+    {
+      "id": "1745571119912",
+      "name": "Dr. Ayman Samir",
+      "email": "ayman@mail.com",
+      "specialty": "Clinical Psychologist",
+      "experience": "12+ year",
+      "availability": true,
+      "price": 110,
+      "languages": [
+        "Arbic",
+        "en"
+      ],
+      "specializations": [
+        "Depression"
+      ],
+      "image": "https://ui-avatars.com/api/?name=Ayman Samir",
+      "password": "123456",
+      "role": "therapist",
+      "rating": 0,
+      "reviews": 0,
+      "education": [
+        "therapy eng",
+        "master of tafaha"
+      ],
+      "schedule": {
+        "Monday": [
+          "09:00"
+        ],
+        "Tuesday": [
+          "09:00"
+        ],
+        "Wednesday": [],
+        "Thursday": [
+          "09:00"
+        ],
+        "Friday": [
+          "09:00"
+        ],
+        "Saturday": [],
+        "Sunday": []
+      },
+      "about": "from zagzoga"
+    },
+    {
+      "id": "1745591526213",
+      "name": "test",
+      "email": "test@mail.com",
+      "specialty": "test for secon",
+      "experience": "10",
+      "availability": true,
+      "price": 99,
+      "languages": [
+        "ar",
+        "en"
+      ],
+      "specializations": [
+        "zega"
+      ],
+      "education": [
+        "zagzoga"
+      ],
+      "about": "test for test for  test for test",
+      "schedule": {
+        "Monday": [
+          "09:00",
+          "10:30"
+        ],
+        "Tuesday": [
+          "09:00",
+          "10:30"
+        ],
+        "Wednesday": [
+          "09:00"
+        ],
+        "Thursday": [
+          "09:00"
+        ],
+        "Friday": [
+          "09:30"
+        ],
+        "Saturday": [],
+        "Sunday": []
+      },
+      "image": "https://ui-avatars.com/api/?name=test",
+      "password": "123456",
+      "rating": 0,
+      "reviews": 0,
+      "role": "therapist"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "1",
+      "userId": "1",
+      "therapistId": "1",
+      "date": "2024-04-25",
+      "time": "10:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "Initial consultation",
+      "duration": 60,
+      "payment": {
+        "amount": 120,
+        "status": "Paid",
+        "method": "Credit Card"
+      }
+    },
+    {
+      "id": "1745587604956",
+      "userId": "4a77",
+      "therapistId": "8a37",
+      "date": "2025-04-18",
+      "time": "09:00",
+      "status": "Cancelled",
+      "type": "Video Call",
+      "notes": "s",
+      "duration": 60,
+      "payment": {
+        "amount": 110,
+        "status": "Paid",
+        "method": "credit-card"
+      }
+    },
+    {
+      "id": "1745587811129",
+      "userId": "1d51",
+      "therapistId": "8a37",
+      "date": "Thursday",
+      "time": "10:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "s",
+      "duration": 60,
+      "payment": {
+        "amount": 110,
+        "status": "Paid",
+        "method": "credit-card"
+      }
+    },
+    {
+      "id": "1745665857369",
+      "userId": "1d51",
+      "therapistId": "1",
+      "date": "Monday",
+      "time": "11:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "sds",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    },
+    {
+      "id": "1745666372439",
+      "userId": "1d51",
+      "therapistId": "1",
+      "date": "Monday",
+      "time": "11:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "ddd",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    },
+    {
+      "id": "1745666372439",
+      "userId": "1d51",
+      "therapistId": "1",
+      "date": "Monday",
+      "time": "11:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "ddd",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    },
+    {
+      "id": "1745666628929",
+      "userId": "1d51",
+      "therapistId": "1",
+      "date": "Thursday",
+      "time": "11:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    },
+    {
+      "id": "1745667087961",
+      "userId": "1d51",
+      "therapistId": "1",
+      "date": "Monday",
+      "time": "15:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "s",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    },
+    {
+      "id": "1745667341612",
+      "userId": "1d51",
+      "therapistId": "1",
+      "date": "Monday",
+      "time": "14:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "s",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "id": "1",
+      "userId": "1",
+      "therapistId": "1",
+      "rating": 5,
+      "comment": "Excellent session, very helpful and understanding.",
+      "date": "2024-04-20"
+    }
+  ],
+  "resources": [
+    {
+      "id": "1",
+      "title": "The Anxiety Toolkit",
+      "author": "Dr. Alice Matthews",
+      "image": "https://m.media-amazon.com/images/I/41Yp6e+4IsL._SY445_SX342_.jpg",
+      "bookUrl": "https://www.amazon.com/Anxiety-Toolkit-Strategies-Fine-Tuning-Moving/dp/0399169253",
+      "rating": 4.8,
+      "reviews": 234,
+      "description": "Practical strategies for managing anxiety and building resilience",
+      "tags": [
+        "Anxiety",
+        "Self-Help",
+        "CBT",
+        "test"
+      ],
+      "type": "E-Book",
+      "category": "Anxiety & Depression",
+      "featured": true
+    },
+    {
+      "id": "1745592304984",
+      "title": "test",
+      "author": "test",
+      "description": "test test tegdsdvgwfdh sdbbshd dnnbsdb ",
+      "type": "E-Book",
+      "category": "Anxiety & Depression",
+      "tags": [
+        "sjjsh"
+      ],
+      "bookUrl": "https:www.google.com",
+      "featured": false,
+      "rating": 0,
+      "reviews": 0
+    },
+    {
+      "id": "1745594907037",
+      "title": "essa book",
+      "author": "m.essa",
+      "description": "zag",
+      "type": "E-Book",
+      "category": "Anxiety & Depression",
+      "tags": [
+        "test"
+      ],
+      "bookUrl": "https://www.google.com/search?q=visita&oq=&gs_lcrp=EgZjaHJvbWUqCQgDECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyCQgFECMYJxjqAjIJCAYQIxgnGOoCMgkIBxAjGCcY6gLSAQs5NjQwODk2ajBqN6gCCLACAfEFpymWFLcttik&sourceid=chrome&ie=UTF-8",
+      "featured": false,
+      "rating": 0,
+      "reviews": 0,
+      "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6Sr8m25u94j_32g35qghuPffbOc0G3yPXTA&s",
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6Sr8m25u94j_32g35qghuPffbOc0G3yPXTA&s"
+    },
+    {
+      "id": "v1",
+      "title": "Physical and Mental Health",
+      "author": "Dr. Michael Chen",
+      "type": "Video",
+      "category": "Mindfulness",
+      "description": "A clear distinction is often made between “mind” and “body” – but mental health and physical health should not be thought of as separate. Learn more about the link between physical health and mental health.",
+      "duration": "3:22",
+      "url": "https://www.youtube.com/watch?v=EKEWk4oWmjY",
+      "thumbnailUrl": "https://img.freepik.com/free-vector/mental-health-awareness-concept_23-2148514643.jpg",
+      "tags": [
+        "Anxiety",
+        "Mental Health",
+        "Self-Help"
+      ],
+      "rating": 4.8,
+      "reviews": 156,
+      "featured": true
+    },
+    {
+      "id": "1745620173801",
+      "title": "What is Anxious Depression?",
+      "author": " Dr. Tracey Marks",
+      "description": "Anxiety and depression often come together. And there's different ways this can look. Sometimes anxiety spawns depression, where you start off with something like obsessive compulsive disorder where you have these overwhelming thoughts that you can't get out of your head or rituals that you can't stop doing. ",
+      "category": "Anxiety & Depression",
+      "tags": [
+        "Anxiety",
+        "Depression"
+      ],
+      "url": "https://www.youtube.com/watch?v=oWJuIkzjbPc",
+      "featured": true,
+      "thumbnailUrl": "https://assets.clevelandclinic.org/transform/LargeFeatureImage/ffbafb7a-6b49-4ece-9aee-31cddd35ddb9/anxiety-Depression-1287120739-967x544-1_jpg",
+      "duration": "7:17",
+      "type": "Video",
+      "rating": 0,
+      "reviews": 0
+    },
+    {
+      "id": "1745620338682",
+      "title": "Depression and Anxiety",
+      "author": " AMAZE Org",
+      "description": "Feelings of sadness, irritability, hopelessness, worthlessness or having difficulty concentrating can happen to anyone, regardless of age. But if you notice these feelings continuing for longer than a few weeks",
+      "category": "Anxiety & Depression",
+      "tags": [
+        "Depression",
+        "Anxiety"
+      ],
+      "url": "https://www.youtube.com/watch?v=wl9U8cDqv9c",
+      "featured": true,
+      "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6Sr8m25u94j_32g35qghuPffbOc0G3yPXTA&s",
+      "duration": "2:10",
+      "type": "Video",
+      "rating": 0,
+      "reviews": 0
+    },
+    {
+      "id": "1745620529591",
+      "title": "Things about Relationships ",
+      "author": " JaidenAnimations",
+      "description": "A relationship is the way two or more people are connected, or the way they behave toward each other: \"What is your relationship to the soloist?\" ",
+      "category": "Relationships",
+      "tags": [
+        "Relationship",
+        "Friendly"
+      ],
+      "url": "https://www.youtube.com/watch?v=4H9jTQKmR3Q",
+      "featured": true,
+      "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXX3NwdGQCMdug0WTG7uSFby8BuoEgh3WXgQ&s",
+      "duration": "9:54",
+      "type": "Video",
+      "rating": 0,
+      "reviews": 0
+    },
+    {
+      "id": "1745620696627",
+      "title": "Managing Stress: Good for Your Health",
+      "author": " Veterans Health Administration",
+      "description": "Too much stress can have serious consequences—both for you and those around you. Luckily, VA provides a number effective ways to help Veterans better manage stress and stay healthy.",
+      "category": "Stress Management",
+      "tags": [
+        "stress",
+        "manage"
+      ],
+      "url": "https://www.youtube.com/watch?v=15GaKTP0gFE",
+      "featured": false,
+      "thumbnailUrl": "https://www.claritychi.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fjmqfvlrp%2Fproduction%2F5d259e4a1dcf5a880e4296e07bc8e86052b5abb7-1200x627.png%3Fw%3D1800%26fit%3Dmax&w=3840&q=65",
+      "duration": "3:10",
+      "type": "Video",
+      "rating": 0,
+      "reviews": 0
+    },
+    {
+      "id": "1745622633764",
+      "title": "test",
+      "author": "test",
+      "description": "test",
+      "category": "Anxiety & Depression",
+      "tags": [
+        "test"
+      ],
+      "url": "https://www.youtube.com/watch?v=EKEWk4oWmjY",
+      "featured": false,
+      "thumbnailUrl": "https://www.youtube.com/watch?v=EKEWk4oWmjY",
+      "duration": "3:10",
+      "type": "Video",
+      "rating": 0,
+      "reviews": 0
+    }
+  ],
+  "events": [
+    {
+      "id": "1",
+      "title": "Overcoming Anxiety Workshop",
+      "date": "2024-04-28",
+      "time": "10:00 AM - 12:00 PM",
+      "location": "Online via Zoom",
+      "category": "Workshop",
+      "capacity": 25,
+      "spotsLeft": 15,
+      "description": "Learn effective techniques to manage anxiety with our expert therapists.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHt1QOgLGabKC0n_ZY71zG0J-5GK2hDwVfRagSR9crqay7wc4NvjiCJLBzeiGFRFXfAfU&usqp=CAU",
+      "presenter": "Dr. Sarah Williams",
+      "price": 50,
+      "registered": []
+    },
+    {
+      "id": "1745614591565",
+      "title": "event test 1",
+      "date": "2025-04-30",
+      "time": "10 AM - 1 PM",
+      "location": "Cairo",
+      "category": "Support Group",
+      "capacity": 5,
+      "description": "test events description",
+      "presenter": "Dr. Yassin",
+      "price": 120,
+      "image": "https://sjhexpress.com/wp-content/uploads/2024/04/Mental-Health-Week-e1714150275360-1200x769.jpg",
+      "registered": [],
+      "spotsLeft": 5
+    },
+    {
+      "id": "1745616166855",
+      "title": "support your mind",
+      "date": "2025-05-27",
+      "time": "9 AM - 2PM",
+      "location": "Cairo",
+      "category": "Group Session",
+      "capacity": 12,
+      "description": "We are here to help you",
+      "presenter": "Dr. Khaled Yassin",
+      "price": 40,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3mOL0GNTY5AtBHx2sGkgL1rPqeg7_jmNfePTJr1Vldsqa_pWo0cqXgX8HbwdoYWJy6jU&usqp=CAU",
+      "registered": [],
+      "spotsLeft": 12
+    },
+    {
+      "id": "1745616259942",
+      "title": "support ",
+      "date": "2025-05-20",
+      "time": "9AM -11 AM",
+      "location": "Alex",
+      "category": "Seminar",
+      "capacity": 2,
+      "description": "We are here to help you",
+      "presenter": "Dr. Yazan Ibrahim",
+      "price": 49,
+      "image": "https://static.vecteezy.com/system/resources/previews/003/332/223/non_2x/mental-health-awareness-day-concept-free-vector.jpg",
+      "registered": [],
+      "spotsLeft": 2
+    },
+    {
+      "id": "1745616401246",
+      "title": "Mental great",
+      "date": "2025-06-02",
+      "time": "9 AM -3 PM",
+      "location": "Cairo",
+      "category": "Workshop",
+      "capacity": 15,
+      "description": "our target is to make all happy",
+      "presenter": "Dr. Farida Mohamed",
+      "price": 30,
+      "image": "https://thumbs.dreamstime.com/b/abstract-vector-illustration-mental-health-awareness-month-abstract-vector-illustration-mental-health-awareness-month-182876011.jpg",
+      "registered": [],
+      "spotsLeft": 15
+    },
+    {
+      "id": "1745616812024",
+      "title": "top mental",
+      "date": "2025-04-15",
+      "time": "11 AM - 4 PM",
+      "location": "Cairo",
+      "category": "Workshop",
+      "capacity": 12,
+      "description": "We are here  for your help",
+      "presenter": "Dr. Mohamed Osama",
+      "price": 35,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN0eSl8ODC1fHa10rtEtNczY2zm7oqZC1_QH76CUCYJOpRhhUE0Jcoy3-rTH7ydbJbfTc&usqp=CAU",
+      "registered": [],
+      "spotsLeft": 12
+    }
+  ],
+  "readingLists": [
+    {
+      "id": "1",
+      "title": "Anxiety Management Essentials",
+      "description": "Essential readings for understanding and managing anxiety",
+      "bookCount": 5,
+      "category": "Anxiety & Stress",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b",
+      "books": [
+        "The Anxiety Toolkit",
+        "Hope and Help for Your Nerves",
+        "Rewire Your Anxious Brain"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "title": "Anxiety & Depression",
+      "icon": "FaBrain",
+      "color": "#4A90E2",
+      "count": 45
+    }
+  ],
+  "adminStats": {
+    "totalTherapists": 45,
+    "activeUsers": 1234,
+    "appointmentsToday": 78,
+    "totalResources": 220,
+    "userGrowth": 12.5,
+    "successRate": 94.2
+  },
+  "notifications": [
+    {
+      "id": "1",
+      "userId": "1",
+      "role": "all",
+      "title": "System Update",
+      "message": "The system will be under maintenance tonight",
+      "type": "system",
+      "read": true,
+      "date": "2024-04-25T10:00:00Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "1",
+      "senderId": 1,
+      "receiverId": 2,
+      "message": "Hi Dr. Williams, I need to reschedule my appointment.",
+      "timestamp": "2024-04-24T10:30:00",
+      "read": false
+    }
+  ],
+  "userProgress": [
+    {
+      "id": "1",
+      "userId": 1,
+      "date": "2024-04-24",
+      "moodRating": 4,
+      "notes": "Feeling better after implementing the suggested techniques",
+      "completedExercises": [
+        "Breathing Exercise",
+        "Mindfulness Practice"
+      ],
+      "therapistFeedback": "Great progress this week!"
+    }
+  ]
+}
