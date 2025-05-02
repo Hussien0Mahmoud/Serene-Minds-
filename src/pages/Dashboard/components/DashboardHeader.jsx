@@ -20,7 +20,7 @@ export default function DashboardHeader() {
       // Clear localStorage
       localStorage.removeItem('user');
       // Navigate to home page
-      navigate('/', { replace: true });
+      navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
     }

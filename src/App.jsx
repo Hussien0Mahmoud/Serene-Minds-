@@ -13,7 +13,6 @@ import DoctorDetail from "./pages/DoctorDetail.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from './pages/Profile';
 import BookAppointment from './pages/BookAppointment';
-import Blog from './pages/Blog/Blog';
 
 import Events from "./pages/Events.jsx";
 import Resources from "./pages/Resources.jsx";
@@ -29,14 +28,7 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="contact" element={<ContactUs />} />
-          <Route 
-            path="appointment" 
-            element={
-              <ProtectedRoute>
-                <Appointment />
-              </ProtectedRoute>
-            } 
-          />
+          <Route path="appointment" element={<Appointment />} />
           <Route 
             path="doctor/:id" 
             element={
@@ -46,7 +38,6 @@ function App() {
             } 
           />
           <Route path="events" element={<Events />} />
-          <Route path="blog" element={<Blog />} />
           <Route path="resources" element={<Resources />} />
         </Route>
         <Route path="/login" element={<Login />} />

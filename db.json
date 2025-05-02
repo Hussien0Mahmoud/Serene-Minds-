@@ -50,6 +50,26 @@
       "role": "user",
       "dateJoined": "2025-04-26T09:03:51.954Z",
       "profileImage": "https://ui-avatars.com/api/?name=hossam"
+    },
+    {
+      "id": "a118",
+      "name": "gemy ",
+      "email": "gemy@mail.com",
+      "phone": "01235469871",
+      "password": "123456",
+      "role": "admin",
+      "dateJoined": "2025-04-26T20:16:59.719Z",
+      "profileImage": "https://ui-avatars.com/api/?name=gemy"
+    },
+    {
+      "id": "6253",
+      "name": "aoutest",
+      "email": "aou@mail.com",
+      "phone": "12366988566",
+      "password": "123456",
+      "role": "user",
+      "dateJoined": "2025-04-30T17:23:40.583Z",
+      "profileImage": "https://ui-avatars.com/api/?name=aou"
     }
   ],
   "therapists": [
@@ -167,10 +187,11 @@
       "specialty": "Clinical Psychologist",
       "experience": "12+ year",
       "availability": true,
-      "price": 110,
+      "price": 25,
       "languages": [
         "Arbic",
-        "en"
+        "en",
+        "ger"
       ],
       "specializations": [
         "Depression"
@@ -182,11 +203,13 @@
       "reviews": 0,
       "education": [
         "therapy eng",
-        "master of tafaha"
+        "master of tafaha",
+        "baljddksnflslf"
       ],
       "schedule": {
         "Monday": [
-          "09:00"
+          "09:00",
+          "11:00"
         ],
         "Tuesday": [
           "09:00"
@@ -205,15 +228,14 @@
     },
     {
       "id": "1745591526213",
-      "name": "test",
+      "name": "test name",
       "email": "test@mail.com",
       "specialty": "test for secon",
       "experience": "10",
       "availability": true,
-      "price": 99,
+      "price": 89,
       "languages": [
-        "ar",
-        "en"
+        "ar"
       ],
       "specializations": [
         "zega"
@@ -248,6 +270,45 @@
       "rating": 0,
       "reviews": 0,
       "role": "therapist"
+    },
+    {
+      "id": "1745702454738",
+      "name": "tttt",
+      "email": "ttt@mail.com",
+      "specialty": "dsd",
+      "experience": "22",
+      "availability": true,
+      "price": 10,
+      "languages": [
+        "dsds"
+      ],
+      "specializations": [
+        "dsds"
+      ],
+      "education": [
+        "dsds"
+      ],
+      "about": "dsdsd",
+      "schedule": {
+        "Monday": [
+          "09:00"
+        ],
+        "Tuesday": [
+          "09:00"
+        ],
+        "Wednesday": [
+          "09:00"
+        ],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
+      },
+      "image": "https://ui-avatars.com/api/?name=tttt",
+      "password": "123456",
+      "rating": 0,
+      "reviews": 0,
+      "role": "therapist"
     }
   ],
   "appointments": [
@@ -257,7 +318,7 @@
       "therapistId": "1",
       "date": "2024-04-25",
       "time": "10:00",
-      "status": "Confirmed",
+      "status": "Pending",
       "type": "Video Call",
       "notes": "Initial consultation",
       "duration": 60,
@@ -394,6 +455,70 @@
         "status": "Paid",
         "method": "paypal"
       }
+    },
+    {
+      "id": "1745673818216",
+      "userId": "1d51",
+      "therapistId": "1",
+      "date": "Tuesday",
+      "time": "09:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "ي",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    },
+    {
+      "id": "1745704828376",
+      "userId": null,
+      "therapistId": "1",
+      "date": "2025-04-16",
+      "time": "10:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "test",
+      "duration": 60,
+      "payment": {
+        "amount": 130,
+        "status": "Paid",
+        "method": "credit-card"
+      }
+    },
+    {
+      "id": "1746034019644",
+      "userId": "6253",
+      "therapistId": "1745571119912",
+      "date": "Friday",
+      "time": "09:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "",
+      "duration": 60,
+      "payment": {
+        "amount": 120,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    },
+    {
+      "id": "1746202632862",
+      "userId": "4a77",
+      "therapistId": "8a37",
+      "date": "Friday",
+      "time": "09:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "ddd",
+      "duration": 60,
+      "payment": {
+        "amount": 110,
+        "status": "Paid",
+        "method": "paypal"
+      }
     }
   ],
   "reviews": [
@@ -445,7 +570,7 @@
       "id": "1745594907037",
       "title": "essa book",
       "author": "m.essa",
-      "description": "zag",
+      "description": "zag from car",
       "type": "E-Book",
       "category": "Anxiety & Depression",
       "tags": [
@@ -565,6 +690,37 @@
       "type": "Video",
       "rating": 0,
       "reviews": 0
+    },
+    {
+      "id": "1745705528401",
+      "title": "Don't Believe Everything",
+      "author": "Joseph Nguyen test",
+      "description": "Learn how to overcome anxiety, self-doubt, and self-sabotage without needing to rely on motivation or willpower.\n",
+      "category": "Stress Management",
+      "tags": [
+        "best book"
+      ],
+      "url": "https://www.amazon.com/Dont-Believe-Everything-Think-Expanded/dp/B0D47VYQMY/ref=zg_bs_g_4682_d_sccl_1/130-3115239-2016700?psc=1",
+      "featured": false,
+      "thumbnailUrl": "https://m.media-amazon.com/images/I/41rmBYPMsUL._SY445_SX342_.jpg",
+      "type": "E-Book",
+      "rating": 0,
+      "reviews": 0
+    },
+    {
+      "id": "1745705749737",
+      "title": " mental health support | UK Trauma Council",
+      "author": "Anna Freud",
+      "description": "After you’ve been through very frightening experiences, asking for help and getting mental health support can feel scary or overwhelming. Sometimes it might feel like there is no one that could possibly help. This video talk about getting mental health support after trauma, ",
+      "category": "Anxiety & Depression",
+      "tags": [],
+      "url": "https://www.youtube.com/watch?v=qnZEqyD74eo",
+      "featured": false,
+      "thumbnailUrl": "https://cdn.indiabioscience.org/imager/articles/231610/Paksh_Featured_V2_b2cf2921c9b71f66606f3c0854ade9b4.webp",
+      "duration": "2:45",
+      "type": "Video",
+      "rating": 0,
+      "reviews": 0
     }
   ],
   "events": [
@@ -651,7 +807,7 @@
       "location": "Cairo",
       "category": "Workshop",
       "capacity": 12,
-      "description": "We are here  for your help",
+      "description": "We are here  for your help hhhhhhhhhhhhhhhhhhhh",
       "presenter": "Dr. Mohamed Osama",
       "price": 35,
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN0eSl8ODC1fHa10rtEtNczY2zm7oqZC1_QH76CUCYJOpRhhUE0Jcoy3-rTH7ydbJbfTc&usqp=CAU",

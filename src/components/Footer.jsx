@@ -93,24 +93,6 @@ const Footer = () => {
 
         <hr className="my-4" />
 
-        <Row>
-          <Col className="text-center text-md-start">
-            <p className="small text-muted mb-0">
-              &copy; {new Date().getFullYear()} Mental Health Support. Made with <FaHeart className="text-danger mx-1" /> for better mental health.
-            </p>
-          </Col>
-          <Col className="text-center text-md-end">
-            <Link to="/privacy" className="text-muted me-3 small text-decoration-none">
-              Privacy Policy
-            </Link>
-            <Link to="/terms" className="text-muted me-3 small text-decoration-none">
-              Terms of Service
-            </Link>
-            <Link to="/contact" className="text-muted small text-decoration-none">
-              Contact Us
-            </Link>
-          </Col>
-        </Row>
       </Container>
     </footer>
   );

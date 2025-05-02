@@ -99,19 +99,19 @@ export default function EventsList() {
                   
                   <div className="d-flex flex-column gap-2 mb-4">
                     <div className="d-flex align-items-center gap-2">
-                      <FaCalendar className="text-primary" />
+                      <FaCalendar style={{ color: '#660ff1' }} />
                       <span>{event.date}</span>
                     </div>
                     <div className="d-flex align-items-center gap-2">
-                      <FaClock className="text-primary" />
+                      <FaClock style={{ color: '#660ff1' }} />
                       <span>{event.time}</span>
                     </div>
                     <div className="d-flex align-items-center gap-2">
-                      <FaMapMarkerAlt className="text-primary" />
+                      <FaMapMarkerAlt style={{ color: '#660ff1' }} />
                       <span>{event.location}</span>
                     </div>
                     <div className="d-flex align-items-center gap-2">
-                      <FaUsers className="text-primary" />
+                      <FaUsers style={{ color: '#660ff1' }} />
                       <span>{event.spotsLeft} spots left</span>
                     </div>
                   </div>

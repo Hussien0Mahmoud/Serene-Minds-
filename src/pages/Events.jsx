@@ -10,7 +10,7 @@ export default function Events() {
       <EventsHero />
       {/* <EventsCalendar /> */}
       <EventsList />
-      <UpcomingWorkshops />
+      {/* <UpcomingWorkshops /> */}
     </>
   );
 }

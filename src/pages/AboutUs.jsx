@@ -6,6 +6,7 @@ import AboutFeatures from '../components/AboutUs/AboutFeatures';
 import AboutReadyToBuild from '../components/AboutUs/AboutReadyToBuild';
 import AboutOurTeam from '../components/AboutUs/AboutOurTeam';
 import AboutWhyUs from '../components/AboutUs/AboutWhyUs';
+import ServiceHighlights from '../components/Home/ServiceHighlights';
 
 export default function AboutUs() {
   return (
@@ -15,7 +16,8 @@ export default function AboutUs() {
     <AboutValues />
     <AboutFeatures />
     <AboutOurTeam />
-    <AboutWhyUs />
+    {/* <AboutWhyUs /> */}
+    <ServiceHighlights />
     <AboutReadyToBuild />
     
     </>

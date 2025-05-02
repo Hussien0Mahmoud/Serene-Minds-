@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTherapists, setLoading, setError } from '../../store/slices/therapistSlice';
 import { therapistApi } from '../../api/api';
 
-export default function TherapistList() {
+export default function TherapistList({ onViewSchedule }) {
   const dispatch = useDispatch();
   const { therapists, loading, error } = useSelector(state => state.therapists);
   const [selectedSpecialty, setSelectedSpecialty] = useState('all');

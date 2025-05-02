@@ -1,0 +1,122 @@
+:root {
+  --primary: #660ff1;
+  --secondary: #FBE4D6;
+  --tertiary: #261FB3;
+  --accent: #C68EFD;
+  --info: #5F99AE;
+}
+
+/* Text Colors */
+.text-primary {
+  color: var(--primary) !important;
+}
+
+.text-secondary {
+  color: var(--secondary) !important;
+}
+
+.text-tertiary {
+  color: var(--tertiary) !important;
+}
+
+.text-accent {
+  color: var(--accent) !important;
+}
+
+.text-info {
+  color: var(--info) !important;
+}
+
+/* Background Colors */
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--secondary) !important;
+}
+
+.bg-tertiary {
+  background-color: var(--tertiary) !important;
+}
+
+.bg-accent {
+  background-color: var(--accent) !important;
+}
+
+.bg-info {
+  background-color: var(--info) !important;
+}
+
+/* Button Colors */
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.btn-secondary {
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+}
+
+.btn-tertiary {
+  background-color: var(--tertiary) !important;
+  border-color: var(--tertiary) !important;
+}
+
+.btn-accent {
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+.btn-info {
+  background-color: var(--info) !important;
+  border-color: var(--info) !important;
+}
+
+/* Border Colors */
+.border-primary {
+  border-color: var(--primary) !important;
+}
+
+.border-secondary {
+  border-color: var(--secondary) !important;
+}
+
+.border-tertiary {
+  border-color: var(--tertiary) !important;
+}
+
+.border-accent {
+  border-color: var(--accent) !important;
+}
+
+.border-info {
+  border-color: var(--info) !important;
+}
+
+/* Hover States */
+.hover-primary:hover {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.hover-secondary:hover {
+  background-color: var(--secondary) !important;
+  color: black !important;
+}
+
+.hover-tertiary:hover {
+  background-color: var(--tertiary) !important;
+  color: white !important;
+}
+
+.hover-accent:hover {
+  background-color: var(--accent) !important;
+  color: white !important;
+}
+
+.hover-info:hover {
+  background-color: var(--info) !important;
+  color: white !important;
+}

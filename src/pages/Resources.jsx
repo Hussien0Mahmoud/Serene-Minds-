@@ -11,6 +11,24 @@ export default function Resources() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
+  // Advanced color scheme based on #660ff1
+  const colorPalette = {
+    base: '#660ff1',           // Main purple
+    transparent: {
+      light: 'rgba(102, 15, 241, 0.1)',   
+      medium: 'rgba(102, 15, 241, 0.3)', 
+      dark: 'rgba(102, 15, 241, 0.8)'     // Dark purple overlay
+    },
+    text: {
+      light: '#f8f5ff',       // Nearly white with purple tint
+      dark: '#2a0966'         // Very dark purple for text
+    },
+    background: {
+      light: '#f3f0ff',       // Very light purple background
+      hover: '#7525f2'        // Slightly darker for hover states
+    }
+  };
+
   useEffect(() => {
     fetchResources();
   }, [activeTab]);
@@ -45,37 +63,50 @@ export default function Resources() {
   return (
     <Container className="py-5">
       <Nav variant="tabs" className="mb-4">
-        <Nav.Item>
-          <Nav.Link 
-            active={activeTab === 'books'} 
-            onClick={() => setActiveTab('books')}
-          >
-            <FaBook className="me-2" />
-            Books & Articles
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link 
-            active={activeTab === 'videos'} 
-            onClick={() => setActiveTab('videos')}
-          >
-            <FaVideo className="me-2" />
-            Videos & Tutorials
-          </Nav.Link>
-        </Nav.Item>
+        {['books', 'videos'].map(tab => (
+          <Nav.Item key={tab}>
+            <Nav.Link 
+              active={activeTab === tab}
+              onClick={() => setActiveTab(tab)}
+              style={activeTab === tab ? {
+                backgroundColor: colorPalette.base,
+                color: colorPalette.text.light,
+                border: 'none'
+              } : {
+                color: colorPalette.base,
+                backgroundColor: colorPalette.transparent.light,
+                border: 'none'
+              }}
+              className="d-flex align-items-center"
+            >
+              {tab === 'books' ? <FaBook className="me-2" /> : <FaVideo className="me-2" />}
+              {tab === 'books' ? 'Books & Articles' : 'Videos & Tutorials'}
+            </Nav.Link>
+          </Nav.Item>
+        ))}
       </Nav>
 
       <Row className="mb-4">
         <Col md={8}>
           <InputGroup>
-            <InputGroup.Text className="bg-light border-0">
+            <InputGroup.Text 
+              style={{ 
+                backgroundColor: colorPalette.transparent.light,
+                border: `1px solid ${colorPalette.transparent.medium}`,
+                color: colorPalette.base
+              }}
+            >
               <FaSearch />
             </InputGroup.Text>
             <Form.Control
               placeholder={`Search ${activeTab}...`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border-0 bg-light"
+              style={{ 
+                backgroundColor: colorPalette.transparent.light,
+                border: `1px solid ${colorPalette.transparent.medium}`,
+                color: colorPalette.text.dark
+              }}
             />
           </InputGroup>
         </Col>
@@ -83,7 +114,11 @@ export default function Resources() {
           <Form.Select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-light border-0"
+            style={{ 
+              backgroundColor: colorPalette.transparent.light,
+              border: `1px solid ${colorPalette.transparent.medium}`,
+              color: colorPalette.text.dark
+            }}
           >
             <option value="all">All Categories</option>
             {categories.map((category, index) => (
@@ -95,7 +130,7 @@ export default function Resources() {
 
       {loading ? (
         <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
+          <div className="spinner-border" style={{ color: colorPalette.base }} role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
@@ -105,7 +140,21 @@ export default function Resources() {
         <Row className="g-4">
           {filteredResources.map((resource) => (
             <Col key={resource.id} md={6} lg={4}>
-              <Card className="h-100 border-0 shadow-sm hover-card">
+              <Card 
+                className="h-100 border-0 shadow-sm"
+                style={{ 
+                  transition: 'all 0.3s ease',
+                  backgroundColor: colorPalette.text.light 
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = `0 10px 20px ${colorPalette.transparent.medium}`;
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
                 <div className="position-relative">
                   <Card.Img 
                     variant="top" 
@@ -115,42 +164,56 @@ export default function Resources() {
                   {resource.type === 'Video' && (
                     <div 
                       className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                      style={{ background: 'rgba(0,0,0,0.3)' }}
+                      style={{ background: colorPalette.transparent.medium }}
                     >
-                      <FaPlay size={48} color="white" />
+                      <FaPlay size={48} color={colorPalette.text.light} />
                     </div>
                   )}
                   <Badge 
                     className="position-absolute top-0 end-0 m-2"
-                    style={{ backgroundColor: '#660ff1' }}
+                    style={{                       backgroundColor: '#660ff1', // Changed from colorPalette.base
+                      color: '#ffffff'  // White text for better contrast
+                    }}
                   >
                     {resource.category}
                   </Badge>
                 </div>
                 <Card.Body className="d-flex flex-column">
-                  <div>
-                    <h5 className="mb-2">{resource.title}</h5>
-                    <p className="text-muted small mb-3">{resource.description}</p>
-                    
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <small className="text-muted">By {resource.author}</small>
-                      {resource.type === 'Video' && (
-                        <small className="text-muted">{resource.duration}</small>
-                      )}
-                    </div>
+                  <h5 style={{ color: colorPalette.text.dark }}>{resource.title}</h5>
+                  <p className="small mb-3" style={{ color: colorPalette.text.dark }}>
+                    {resource.description}
+                  </p>
+                  
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <small style={{ color: colorPalette.base }}>By {resource.author}</small>
+                    {resource.type === 'Video' && (
+                      <small style={{ color: colorPalette.text.dark }}>{resource.duration}</small>
+                    )}
+                  </div>
 
-                    <div className="mb-3">
-                      {resource.tags.map((tag, i) => (
-                        <Badge 
-                          key={i} 
-                          className="me-2 mb-2"
-                          bg="light"
-                          text="dark"
-                        >
-                          #{tag}
-                        </Badge>
-                      ))}
-                    </div>
+                  <div className="mb-3">
+                    {resource.tags.map((tag, i) => (
+                      <Badge 
+                        key={i} 
+                        className="me-2 mb-2"
+                        style={{ 
+                          backgroundColor: '#660ff1', // Light purple background
+                          color: '#fff', // Purple text
+                          border: '1px solid rgba(102, 15, 241, 0.3)',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.backgroundColor = '#660ff1';
+                          e.target.style.color = 'white';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.backgroundColor = '#660ff1';
+                          e.target.style.color = '#fff';
+                        }}
+                      >
+                        #{tag}
+                      </Badge>
+                    ))}
                   </div>
 
                   <Button 
@@ -158,7 +221,13 @@ export default function Resources() {
                     className="w-100 mt-auto"
                     href={resource.url || resource.bookUrl}
                     target="_blank"
-                    style={{ backgroundColor: '#660ff1', border: 'none' }}
+                    style={{ 
+                      backgroundColor: colorPalette.base,
+                      border: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = colorPalette.background.hover}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = colorPalette.base}
                   >
                     {resource.type === 'Video' ? (
                       <>
@@ -168,7 +237,7 @@ export default function Resources() {
                     ) : (
                       <>
                         <FaDownload className="me-2" />
-                        Download Now
+                        Buy Now
                       </>
                     )}
                   </Button>

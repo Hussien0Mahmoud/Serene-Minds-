@@ -4,6 +4,16 @@ import { FaEdit, FaTrash, FaUser } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers, addNewUser, editUser, deleteUser } from '../../../api/userapi';
 
+const colors = {
+  primary: '#660ff1',
+  primaryLight: 'rgba(102, 15, 241, 0.1)',
+  primaryMedium: 'rgba(102, 15, 241, 0.3)',
+  primaryDark: 'rgba(102, 15, 241, 0.8)',
+  text: '#2a0966',
+  danger: '#dc3545',
+  success: '#198754'
+};
+
 export default function ManageUsers() {
   const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
@@ -79,7 +89,7 @@ export default function ManageUsers() {
     <Container fluid className="py-4">
       <Row className="mb-4">
         <Col className="d-flex justify-content-between align-items-center">
-          <h4 className="mb-0">Manage Users</h4>
+          <h4 className="mb-0" style={{ color: colors.text }}>Manage Users</h4>
           <Button 
             onClick={() => {
               setSelectedUser({
@@ -91,7 +101,13 @@ export default function ManageUsers() {
               });
               setShowModal(true);
             }}
-            style={{ backgroundColor: '#660ff1', border: 'none' }}
+            style={{ 
+              backgroundColor: colors.primary, 
+              border: 'none',
+              transition: 'background-color 0.3s ease'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = colors.primaryDark}
+            onMouseOut={(e) => e.target.style.backgroundColor = colors.primary}
           >
             Add New User
           </Button>
@@ -100,7 +116,7 @@ export default function ManageUsers() {
 
       {loading ? (
         <div className="text-center py-4">
-          <div className="spinner-border text-primary" role="status">
+          <div className="spinner-border" style={{ color: colors.primary }} role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
@@ -137,11 +153,11 @@ export default function ManageUsers() {
                       </div>
                     </td>
                     <td>
-                      <Badge bg={
-                        user.role === 'admin' ? 'danger' : 
-                        user.role === 'therapist' ? 'success' : 
-                        'primary'
-                      }>
+                      <Badge style={{ 
+                        backgroundColor: user.role === 'admin' ? colors.danger : 
+                                      user.role === 'therapist' ? colors.success : 
+                                      colors.primary
+                      }}>
                         {user.role}
                       </Badge>
                     </td>
@@ -153,14 +169,14 @@ export default function ManageUsers() {
                         className="me-2 p-0"
                         onClick={() => handleEdit(user)}
                       >
-                        <FaEdit className="text-primary" />
+                        <FaEdit style={{ color: colors.primary }} />
                       </Button>
                       <Button
                         variant="link"
                         className="p-0"
                         onClick={() => handleDelete(user.id)}
                       >
-                        <FaTrash className="text-danger" />
+                        <FaTrash style={{ color: colors.danger }} />
                       </Button>
                     </td>
                   </tr>
@@ -171,9 +187,16 @@ export default function ManageUsers() {
         </Card>
       )}
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>
+      <Modal 
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        style={{ color: colors.text }}
+      >
+        <Modal.Header 
+          closeButton 
+          style={{ borderBottom: `1px solid ${colors.primaryLight}` }}
+        >
+          <Modal.Title style={{ color: colors.text }}>
             {selectedUser?.id ? 'Edit User' : 'Add New User'}
           </Modal.Title>
         </Modal.Header>
@@ -250,12 +273,26 @@ export default function ManageUsers() {
             )}
 
             <div className="d-flex justify-content-end gap-2">
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
+              <Button 
+                variant="secondary" 
+                onClick={() => setShowModal(false)}
+                style={{ 
+                  backgroundColor: colors.primaryLight,
+                  color: colors.primary,
+                  border: 'none'
+                }}
+              >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
-                style={{ backgroundColor: '#660ff1', border: 'none' }}
+                style={{ 
+                  backgroundColor: colors.primary,
+                  border: 'none',
+                  transition: 'background-color 0.3s ease'
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = colors.primaryDark}
+                onMouseOut={(e) => e.target.style.backgroundColor = colors.primary}
                 disabled={loading}
               >
                 {loading ? 'Saving...' : 'Save Changes'}

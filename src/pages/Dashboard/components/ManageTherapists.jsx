@@ -5,6 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTherapists, setLoading, setError } from '../../../store/slices/therapistSlice';
 import { therapistApi } from '../../../api/api';
 
+const colors = {
+  primary: '#660ff1',
+  primaryLight: 'rgba(102, 15, 241, 0.1)',
+  primaryMedium: 'rgba(102, 15, 241, 0.3)',
+  primaryDark: 'rgba(102, 15, 241, 0.8)',
+  text: '#2a0966'
+};
+
 const validateTherapist = (data) => {
   const errors = [];
   
@@ -18,7 +26,6 @@ const validateTherapist = (data) => {
   if (!data.specializations?.length) errors.push('At least one specialization is required');
   if (!data.education?.length) errors.push('At least one education entry is required');
   
-  // Check if schedule exists and has at least one time slot across all days
   const hasTimeSlots = data.schedule && 
     Object.values(data.schedule).some(slots => Array.isArray(slots) && slots.length > 0);
   
@@ -55,7 +62,6 @@ export default function ManageTherapists() {
   };
 
   const handleEdit = (therapist) => {
-    // Ensure schedule has all days initialized
     const schedule = {
       Monday: [],
       Tuesday: [],
@@ -64,7 +70,7 @@ export default function ManageTherapists() {
       Friday: [],
       Saturday: [],
       Sunday: [],
-      ...therapist.schedule // Spread existing schedule after default values
+      ...therapist.schedule
     };
     
     setSelectedTherapist({
@@ -97,7 +103,6 @@ export default function ManageTherapists() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Ensure schedule is properly structured
     const schedule = {
       Monday: selectedTherapist.schedule?.Monday || [],
       Tuesday: selectedTherapist.schedule?.Tuesday || [],
@@ -208,7 +213,7 @@ export default function ManageTherapists() {
     <Container fluid className="py-4">
       <Row className="mb-4">
         <Col className="d-flex justify-content-between align-items-center">
-          <h4 className="mb-0">Manage Therapists</h4>
+          <h4 className="mb-0" style={{ color: colors.text }}>Manage Therapists</h4>
           <Button 
             onClick={() => {
               setSelectedTherapist({
@@ -234,7 +239,7 @@ export default function ManageTherapists() {
               });
               setShowModal(true);
             }}
-            style={{ backgroundColor: '#660ff1', border: 'none' }}
+            style={{ backgroundColor: colors.primary, border: 'none' }}
           >
             Add New Therapist
           </Button>
@@ -243,7 +248,7 @@ export default function ManageTherapists() {
 
       {loading ? (
         <div className="text-center py-4">
-          <div className="spinner-border text-primary" role="status">
+          <div className="spinner-border" style={{ color: colors.primary }} role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
@@ -299,7 +304,7 @@ export default function ManageTherapists() {
                         className="me-2 p-0"
                         onClick={() => handleEdit(therapist)}
                       >
-                        <FaEdit className="text-primary" />
+                        <FaEdit style={{ color: colors.primary }} />
                       </Button>
                       <Button
                         variant="link"
@@ -318,8 +323,8 @@ export default function ManageTherapists() {
       )}
 
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
+        <Modal.Header closeButton style={{ borderBottom: `1px solid ${colors.primaryLight}` }}>
+          <Modal.Title style={{ color: colors.text }}>
             {selectedTherapist?.id ? 'Edit Therapist' : 'Add New Therapist'}
           </Modal.Title>
         </Modal.Header>
@@ -429,6 +434,10 @@ export default function ManageTherapists() {
                 <Button 
                   onClick={handleAddEducation}
                   variant="outline-primary"
+                  style={{ 
+                    borderColor: colors.primary,
+                    color: colors.primary
+                  }}
                 >
                   <FaPlus />
                 </Button>
@@ -442,7 +451,11 @@ export default function ManageTherapists() {
                   <Badge 
                     key={index} 
                     className="me-2 mb-2 p-2"
-                    style={{ backgroundColor: '#660ff1' }}
+                    style={{ 
+                      backgroundColor: colors.primaryLight,
+                      color: colors.primary,
+                      border: `1px solid ${colors.primaryMedium}`
+                    }}
                   >
                     {spec}
                     <FaTimes 
@@ -462,6 +475,10 @@ export default function ManageTherapists() {
                 <Button 
                   onClick={handleAddSpecialization}
                   variant="outline-primary"
+                  style={{ 
+                    borderColor: colors.primary,
+                    color: colors.primary
+                  }}
                 >
                   <FaPlus />
                 </Button>
@@ -495,6 +512,10 @@ export default function ManageTherapists() {
                 <Button 
                   onClick={handleAddLanguage}
                   variant="outline-primary"
+                  style={{ 
+                    borderColor: colors.primary,
+                    color: colors.primary
+                  }}
                 >
                   <FaPlus />
                 </Button>
@@ -562,8 +583,11 @@ export default function ManageTherapists() {
                       <Badge 
                         key={index} 
                         className="p-2"
-                        bg="light"
-                        text="dark"
+                        style={{ 
+                          backgroundColor: colors.primaryLight,
+                          color: colors.text,
+                          border: `1px solid ${colors.primaryMedium}`
+                        }}
                       >
                         {time}
                         <FaTimes 
@@ -588,12 +612,23 @@ export default function ManageTherapists() {
             </Form.Group>
 
             <div className="d-flex justify-content-end gap-2 mt-4">
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
+              <Button 
+                variant="secondary" 
+                onClick={() => setShowModal(false)}
+                style={{ 
+                  backgroundColor: colors.primaryLight,
+                  color: colors.primary,
+                  border: 'none'
+                }}
+              >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
-                style={{ backgroundColor: '#660ff1', border: 'none' }}
+                style={{ 
+                  backgroundColor: colors.primary,
+                  border: 'none'
+                }}
                 disabled={loading}
               >
                 {loading ? 'Saving...' : 'Save Changes'}

@@ -1,4 +1,3 @@
-
 /* first layer */
 
 /* Search bar wrapper */
@@ -11,9 +10,14 @@
 .items .dropdown-toggle::after {
     margin-left: 10px;
 }
-.dropdown-menu{
-    background-color: black;
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    background-color: white !important;
+    border: none !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
+
 /* Search container */
 .dropdown-search {
     max-width: 1000px;
@@ -155,4 +159,15 @@
     padding-block: 5px !important;
     padding-left: 30px !important;
     font-size: 14px !important;
+}
+
+/* Dropdown menu hover and active states */
+.hover-item:hover {
+    background-color: #660ff115 !important;
+    color: #660ff1 !important;
+}
+
+.dropdown-item:active {
+    background-color: #660ff1 !important;
+    color: white !important;
 }

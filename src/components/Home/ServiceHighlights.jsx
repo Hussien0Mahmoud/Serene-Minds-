@@ -16,19 +16,19 @@ export default function ServiceHighlights() {
       title: "Individual Therapy",
       description: "One-on-one sessions with licensed therapists tailored to your needs",
       image: "https://media.istockphoto.com/id/860065560/photo/patient-after-traumatic-events.jpg?s=612x612&w=0&k=20&c=CTTF2-vA6YNdwt00Tt77RZPySGvZ2o_6Nqq0Pb5lM0g=",
-      color: "#4A90E2"
+      color: "#6600f1"
     },
     {
       title: "Group Support",
       description: "Connect with others facing similar challenges in a guided environment",
       image: "https://media.istockphoto.com/id/1404822602/photo/group-of-people-sitting-in-a-circle-talking-to-each-other-having-a-group-therapy-appointment.jpg?s=612x612&w=0&k=20&c=Y66GI3JJzo4jZbBk8PpGPsMFdTVOHL12VLiPanzZuEQ=",
-      color: "#50E3C2"
+      color: "#6600f1"
     },
     {
       title: "Crisis Intervention",
       description: "24/7 emergency support when you need it most",
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbZAN9tnO0ilNHLOyUG8munpwDefy8Lnq9Sw&s",
-      color: "#F5A623"
+      color: "#6600f1"
     }
   ];
 
@@ -118,12 +118,12 @@ export default function ServiceHighlights() {
                         animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <button 
+                        {/* <button 
                           className="btn btn-link p-0 text-decoration-none"
                           style={{ color: service.color }}
                         >
                           Learn More <FaArrowRight className="ms-2" />
-                        </button>
+                        </button> */}
                       </motion.div>
                     </motion.div>
                   </div>
