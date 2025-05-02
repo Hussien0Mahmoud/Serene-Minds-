@@ -1,0 +1,191 @@
+{
+  "users": [
+    {
+      "id": "6253",
+      "name": "aoutest",
+      "email": "aou@mail.com",
+      "phone": "12366988566",
+      "password": "123456",
+      "role": "user",
+      "dateJoined": "2025-04-30T17:23:40.583Z",
+      "profileImage": "https://ui-avatars.com/api/?name=aou"
+    }
+  ],
+  "therapists": [
+    {
+      "id": "1745591526213",
+      "name": "test name",
+      "email": "test@mail.com",
+      "specialty": "test for secon",
+      "experience": "10",
+      "availability": true,
+      "price": 89,
+      "languages": [
+        "ar"
+      ],
+      "specializations": [
+        "zega"
+      ],
+      "education": [
+        "zagzoga"
+      ],
+      "about": "test for test for  test for test",
+      "schedule": {
+        "Monday": [
+          "09:00",
+          "10:30"
+        ],
+        "Tuesday": [
+          "09:00",
+          "10:30"
+        ],
+        "Wednesday": [
+          "09:00"
+        ],
+        "Thursday": [
+          "09:00"
+        ],
+        "Friday": [
+          "09:30"
+        ],
+        "Saturday": [],
+        "Sunday": []
+      },
+      "image": "https://ui-avatars.com/api/?name=test",
+      "password": "123456",
+      "rating": 0,
+      "reviews": 0,
+      "role": "therapist"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "1746202632862",
+      "userId": "4a77",
+      "therapistId": "8a37",
+      "date": "Friday",
+      "time": "09:00",
+      "status": "Confirmed",
+      "type": "Video Call",
+      "notes": "ddd",
+      "duration": 60,
+      "payment": {
+        "amount": 110,
+        "status": "Paid",
+        "method": "paypal"
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "id": "1",
+      "userId": "1",
+      "therapistId": "1",
+      "rating": 5,
+      "comment": "Excellent session, very helpful and understanding.",
+      "date": "2024-04-20"
+    }
+  ],
+  "resources": [
+    {
+      "id": "1745705749737",
+      "title": " mental health support | UK Trauma Council",
+      "author": "Anna Freud",
+      "description": "After you’ve been through very frightening experiences, asking for help and getting mental health support can feel scary or overwhelming. Sometimes it might feel like there is no one that could possibly help. This video talk about getting mental health support after trauma, ",
+      "category": "Anxiety & Depression",
+      "tags": [],
+      "url": "https://www.youtube.com/watch?v=qnZEqyD74eo",
+      "featured": false,
+      "thumbnailUrl": "https://cdn.indiabioscience.org/imager/articles/231610/Paksh_Featured_V2_b2cf2921c9b71f66606f3c0854ade9b4.webp",
+      "duration": "2:45",
+      "type": "Video",
+      "rating": 0,
+      "reviews": 0
+    }
+  ],
+  "events": [
+    {
+      "id": "1745616812024",
+      "title": "top mental",
+      "date": "2025-04-15",
+      "time": "11 AM - 4 PM",
+      "location": "Cairo",
+      "category": "Workshop",
+      "capacity": 12,
+      "description": "We are here  for your help hhhhhhhhhhhhhhhhhhhh",
+      "presenter": "Dr. Mohamed Osama",
+      "price": 35,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN0eSl8ODC1fHa10rtEtNczY2zm7oqZC1_QH76CUCYJOpRhhUE0Jcoy3-rTH7ydbJbfTc&usqp=CAU",
+      "registered": [],
+      "spotsLeft": 12
+    }
+  ],
+  "readingLists": [
+    {
+      "id": "1",
+      "title": "Anxiety Management Essentials",
+      "description": "Essential readings for understanding and managing anxiety",
+      "bookCount": 5,
+      "category": "Anxiety & Stress",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b",
+      "books": [
+        "The Anxiety Toolkit",
+        "Hope and Help for Your Nerves",
+        "Rewire Your Anxious Brain"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "title": "Anxiety & Depression",
+      "icon": "FaBrain",
+      "color": "#4A90E2",
+      "count": 45
+    }
+  ],
+  "adminStats": {
+    "totalTherapists": 45,
+    "activeUsers": 1234,
+    "appointmentsToday": 78,
+    "totalResources": 220,
+    "userGrowth": 12.5,
+    "successRate": 94.2
+  },
+  "notifications": [
+    {
+      "id": "1",
+      "userId": "1",
+      "role": "all",
+      "title": "System Update",
+      "message": "The system will be under maintenance tonight",
+      "type": "system",
+      "read": true,
+      "date": "2024-04-25T10:00:00Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "1",
+      "senderId": 1,
+      "receiverId": 2,
+      "message": "Hi Dr. Williams, I need to reschedule my appointment.",
+      "timestamp": "2024-04-24T10:30:00",
+      "read": false
+    }
+  ],
+  "userProgress": [
+    {
+      "id": "1",
+      "userId": 1,
+      "date": "2024-04-24",
+      "moodRating": 4,
+      "notes": "Feeling better after implementing the suggested techniques",
+      "completedExercises": [
+        "Breathing Exercise",
+        "Mindfulness Practice"
+      ],
+      "therapistFeedback": "Great progress this week!"
+    }
+  ]
+}
