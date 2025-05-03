@@ -5,14 +5,26 @@ from .models import (
     Event, EventRegistration, ReadingList, ReadingListItem, 
     Category, Notification, Message, UserProgress, AdminStats
 )
-
+from djoser.serializers import UserCreateSerializer
 User = get_user_model()
 
+
+
+class UserRegistrationSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'phone', 'role', 'profile_image', 'name']
+
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        user.save()
+        return user
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'phone', 'role', 'profile_image', 'date_joined', 'name']
+        fields = ['id', 'username', 'email', 'phone', 'role', 'profile_image', 'date_joined', 'name', "password"]
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -20,6 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         user = User.objects.create(**validated_data)
+        print(password)
         if password:
             user.set_password(password)
             user.save()
