@@ -16,7 +16,7 @@ export default function NotificationsDropdown() {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/notifications`);
+      const response = await axios.get(`http://localhost:8000/api/notifications`);
       const userNotifications = response.data.filter(note => 
         note.userId === currentUser.id || 
         note.role === 'all' || 
@@ -30,7 +30,7 @@ export default function NotificationsDropdown() {
 
   const handleRead = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/notifications/${id}`, { read: true });
+      await axios.patch(`http://localhost:8000/api/notifications/${id}`, { read: true });
       dispatch(markAsRead(id));
     } catch (error) {
       console.error('Error marking notification as read:', error);

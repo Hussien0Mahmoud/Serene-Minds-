@@ -12,14 +12,39 @@ export default function TherapistList({ onViewSchedule }) {
   const [selectedSpecialty, setSelectedSpecialty] = useState('all');
 
   useEffect(() => {
-    fetchTherapists();
-  }, []);
+    if (!therapists || therapists.length === 0) {
+      fetchTherapists();
+    }
+    console.log( therapists);
+  }, [therapists]);
 
   const fetchTherapists = async () => {
     try {
       dispatch(setLoading(true));
       const response = await therapistApi.getAllTherapists();
-      dispatch(setTherapists(response.data));
+      // Extract results from paginated response
+      const therapistsData = response.data.results || [];
+      
+      // Transform the data to match component expectations
+      const transformedData = therapistsData.map(therapist => ({
+        id: therapist.id,
+        name: therapist.user.username,
+        email: therapist.user.email,
+        specialty: therapist.specialty,
+        experience: `${therapist.experience} years`,
+        availability: therapist.availability,
+        price: parseFloat(therapist.price),
+        languages: Array.isArray(therapist.languages) ? therapist.languages : [therapist.languages],
+        specializations: Array.isArray(therapist.specializations) ? therapist.specializations : [therapist.specializations],
+        education: Array.isArray(therapist.education) ? therapist.education : [therapist.education],
+        about: therapist.about,
+        rating: parseFloat(therapist.rating),
+        reviews: therapist.reviews_count,
+        image: therapist.user.profile_image,
+        time_slots: therapist.time_slots
+      }));
+
+      dispatch(setTherapists(transformedData));
     } catch (error) {
       dispatch(setError('Failed to fetch therapists'));
     } finally {
@@ -28,20 +53,27 @@ export default function TherapistList({ onViewSchedule }) {
   };
 
   const getSpecialtyOptions = () => {
+    if (!Array.isArray(therapists)) {
+      return [];
+    }
+    
     const specialties = new Set();
     therapists.forEach(therapist => {
       if (therapist.specialty) specialties.add(therapist.specialty);
-      therapist.specializations?.forEach(spec => specialties.add(spec));
+      if (therapist.specializations) {
+        (Array.isArray(therapist.specializations) ? therapist.specializations : [therapist.specializations])
+          .forEach(spec => specialties.add(spec));
+      }
     });
     return Array.from(specialties);
   };
 
   const filteredTherapists = selectedSpecialty === 'all' 
-    ? therapists
-    : therapists.filter(therapist => 
+    ? (Array.isArray(therapists) ? therapists : [])
+    : (Array.isArray(therapists) ? therapists.filter(therapist => 
         therapist.specializations?.includes(selectedSpecialty) || 
         therapist.specialty?.toLowerCase().includes(selectedSpecialty.toLowerCase())
-      );
+      ) : []);
 
   return (
     <Container className="py-5">

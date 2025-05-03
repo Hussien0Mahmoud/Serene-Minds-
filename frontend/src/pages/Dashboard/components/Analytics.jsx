@@ -18,7 +18,7 @@ export default function Analytics() {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/adminStats');
+      const response = await axios.get('http://localhost:8000/api/adminStats');
       setStats([
         {
           title: 'Total Therapists',

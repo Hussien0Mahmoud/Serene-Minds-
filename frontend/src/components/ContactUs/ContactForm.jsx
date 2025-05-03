@@ -50,7 +50,7 @@ export default function ContactForm() {
                       <FaMapMarkerAlt size={24} style={{ color: '#660ff1' }}  />
                       <h6 className="fw-bold ">Our Location</h6>
                     </div>
-                    <p className="text-muted ps-4 mb-2">123 Street, City, Country</p>
+                    <p className="text-muted ps-4 mb-2">Cairo,Nasr City</p>
                   </div>
     
                   <div className="d-flex flex-column mb-3">
@@ -66,7 +66,7 @@ export default function ContactForm() {
                       <FaEnvelope size={24} style={{ color: '#660ff1' }}  />
                       <h6 className="fw-bold ">Email Us</h6>
                     </div>
-                    <p className="text-muted ps-4 mb-2">WEBIFY@mail.com</p>
+                    <p className="text-muted ps-4 mb-2">SereneMinds@mail.com</p>
                   </div>
     
                   <div className="d-flex flex-column mb-3">

@@ -17,7 +17,7 @@ export default function ManageEvents() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/events');
+      const response = await axios.get('http://localhost:8000/api/events');
       setEvents(response.data);
     } catch (err) {
       setError('Failed to fetch events');
@@ -31,9 +31,9 @@ export default function ManageEvents() {
     e.preventDefault();
     try {
       if (selectedEvent.id) {
-        await axios.put(`http://localhost:5000/events/${selectedEvent.id}`, selectedEvent);
+        await axios.put(`http://localhost:8000/api/events/${selectedEvent.id}`, selectedEvent);
       } else {
-        await axios.post('http://localhost:5000/events', {
+        await axios.post('http://localhost:8000/api/events', {
           ...selectedEvent,
           id: Date.now().toString(),
           registered: [],
@@ -52,7 +52,7 @@ export default function ManageEvents() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this event?')) {
       try {
-        await axios.delete(`http://localhost:5000/events/${id}`);
+        await axios.delete(`http://localhost:8000/api/events/${id}`);
         fetchEvents();
       } catch (err) {
         setError('Failed to delete event');

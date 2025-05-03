@@ -25,12 +25,12 @@ export default function AdminDashboard() {
         eventsRes,
         adminStatsRes
       ] = await Promise.all([
-        axios.get('http://localhost:5000/therapists'),
-        axios.get('http://localhost:5000/users'),
-        axios.get('http://localhost:5000/appointments'),
-        axios.get('http://localhost:5000/resources'),
-        axios.get('http://localhost:5000/events'),
-        axios.get('http://localhost:5000/adminStats')
+        axios.get('http://localhost:8000/api/therapists'),
+        axios.get('http://localhost:8000/api/users'),
+        axios.get('http://localhost:8000/api/appointments'),
+        axios.get('http://localhost:8000/api/resources'),
+        axios.get('http://localhost:8000/api/events'),
+        axios.get('http://localhost:8000/api/adminStats')
       ]);
 
       // Calculate active users (users with role "user")

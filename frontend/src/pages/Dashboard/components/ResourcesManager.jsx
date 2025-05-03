@@ -19,7 +19,7 @@ export default function ResourcesManager() {
   const fetchResources = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5000/resources?type=${activeTab === 'books' ? 'E-Book' : 'Video'}`);
+      const response = await axios.get(`http://localhost:8000/api/resources?type=${activeTab === 'books' ? 'E-Book' : 'Video'}`);
       setResources(response.data);
     } catch (err) {
       setError('Failed to fetch resources');
@@ -41,9 +41,9 @@ export default function ResourcesManager() {
       };
 
       if (selectedResource.id) {
-        await axios.put(`http://localhost:5000/resources/${selectedResource.id}`, resourceData);
+        await axios.put(`http://localhost:8000/api/resources/${selectedResource.id}`, resourceData);
       } else {
-        await axios.post('http://localhost:5000/resources', {
+        await axios.post('http://localhost:8000/api/resources', {
           ...resourceData,
           id: Date.now().toString()
         });
@@ -61,7 +61,7 @@ export default function ResourcesManager() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this resource?')) {
       try {
-        await axios.delete(`http://localhost:5000/resources/${id}`);
+        await axios.delete(`http://localhost:8000/api/resources/${id}`);
         fetchResources();
       } catch (err) {
         setError('Failed to delete resource');

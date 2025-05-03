@@ -16,7 +16,7 @@ export default function EventsList() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/events');
+      const response = await axios.get('http://localhost:8000/api/events');
       setEvents(response.data);
     } catch (err) {
       setError('Failed to fetch events');

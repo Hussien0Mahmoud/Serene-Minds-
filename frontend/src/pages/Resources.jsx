@@ -36,7 +36,7 @@ export default function Resources() {
   const fetchResources = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5000/resources?type=${activeTab === 'books' ? 'E-Book' : 'Video'}`);
+      const response = await axios.get(`http://localhost:8000/api/resources?type=${activeTab === 'books' ? 'E-Book' : 'Video'}`);
       setResources(response.data);
     } catch (err) {
       setError('Failed to fetch resources');

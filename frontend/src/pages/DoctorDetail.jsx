@@ -21,7 +21,7 @@ export default function DoctorDetail() {
         setLoading(true);
         const [doctorRes, appointmentsRes] = await Promise.all([
           therapistApi.getTherapistById(id),
-          axios.get('http://localhost:5000/appointments')
+          axios.get('http://localhost:8000/api/appointments')
         ]);
 
         if (doctorRes.data) {

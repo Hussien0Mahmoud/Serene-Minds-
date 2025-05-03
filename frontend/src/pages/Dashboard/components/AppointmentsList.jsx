@@ -21,9 +21,9 @@ export default function AppointmentsList() {
     try {
       setLoading(true);
       const [appointmentsRes, therapistsRes, usersRes] = await Promise.all([
-        axios.get('http://localhost:5000/appointments'),
-        axios.get('http://localhost:5000/therapists'),
-        axios.get('http://localhost:5000/users')
+        axios.get('http://localhost:8000/api/appointments'),
+        axios.get('http://localhost:8000/api/therapists'),
+        axios.get('http://localhost:8000/api/users')
       ]);
 
       setAppointments(appointmentsRes.data);
@@ -59,7 +59,7 @@ export default function AppointmentsList() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/appointments/${selectedAppointment.id}`, selectedAppointment);
+      await axios.put(`http://localhost:8000/api/appointments/${selectedAppointment.id}`, selectedAppointment);
       setShowModal(false);
       fetchData();
       alert('Appointment updated successfully!');
@@ -71,7 +71,7 @@ export default function AppointmentsList() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this appointment?')) {
       try {
-        await axios.delete(`http://localhost:5000/appointments/${id}`);
+        await axios.delete(`http://localhost:8000/api/appointments/${id}`);
         fetchData();
       } catch (err) {
         setError('Failed to delete appointment');
