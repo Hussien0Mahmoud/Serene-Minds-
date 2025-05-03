@@ -19,7 +19,7 @@ export default function Login() {
     try {
       dispatch(setLoading(true));
       const response = await loginUser({ email, password });
-      const userResponse = await loginUser({ email, password });
+      console.log(response.data);
       
       if (response.data.length === 0) {
         dispatch(setError('User not found'));
