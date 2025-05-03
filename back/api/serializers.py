@@ -161,7 +161,7 @@ class ResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
         fields = [
-            'id', 'title', 'author', 'description', 'category', 'tags',
+            'id', 'title', 'author', 'description', 'category', 
             'url', 'featured', 'thumbnail_url', 'duration', 'type',
             'rating', 'reviews_count', 'created_at'
         ]
