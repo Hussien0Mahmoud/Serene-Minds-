@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="user")
     profile_image = models.URLField(blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-
+    name = models.CharField(max_length=250, default="Anon")
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = [
         "username",

@@ -21,7 +21,7 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       dispatch(setError('Passwords do not match'));
       return;
@@ -29,32 +29,29 @@ export default function Signup() {
 
     try {
       dispatch(setLoading(true));
-      
-      // Check if email already exists
-      const emailCheck = await checkEmailExists(formData.email);
-      if (emailCheck.data.length > 0) {
-        dispatch(setError('Email already exists'));
-        return;
-      }
 
-      // Create new user object
       const newUser = {
         name: formData.name,
         email: formData.email,
+        username: formData.email,
         phone: formData.phone,
         password: formData.password,
         role: 'user',
-        dateJoined: new Date().toISOString(),
         profileImage: `https://ui-avatars.com/api/?name=${formData.name.replace(' ', '+')}`
       };
 
       const response = await addNewUser(newUser);
-      // After successful signup, login the user automatically
       dispatch(loginSuccess(response.data));
-      // Navigate to login page
       navigate('/login');
     } catch (err) {
-      dispatch(setError(err.message));
+      console.log(err)
+      let errMsg = '';
+      if (errMsg.response) {
+        for (const k in err.response.data) {
+          errMsg = err.response.data[k].join('/n')
+        }
+      }
+      dispatch(setError(errMsg));
     }
   };
 
@@ -66,7 +63,7 @@ export default function Signup() {
   };
 
   return (
-    <div style={{ 
+    <div style={{
       background: 'linear-gradient(135deg, #f0f7ff 0%, #e6f0f9 100%)',
       minHeight: '100vh',
       paddingTop: '50px',
@@ -182,8 +179,8 @@ export default function Signup() {
                     </div>
                   )}
 
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="w-100 mb-3"
                     style={{ backgroundColor: '#660ff1', border: 'none', padding: '12px' }}
                     disabled={loading}
