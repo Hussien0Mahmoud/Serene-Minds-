@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="user")
     profile_image = models.URLField(blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
+    USERNAME_FIELD = "email"
 
     def __str__(self):
         return f"{self.username} ({self.get_role_display()})"
