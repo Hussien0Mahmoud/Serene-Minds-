@@ -15,26 +15,26 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       dispatch(setLoading(true));
       const response = await loginUser({ email, password });
-      console.log(response.data);
-      
-      if (response.data.length === 0) {
+      console.log(response);
+
+      if (response.status !== 200) {
         dispatch(setError('User not found'));
         return;
       }
 
-      const user = response.data[0];
-      if (user.password !== password) {
-        dispatch(setError('Invalid password'));
-        return;
-      }
+      const user = response.data;
+      // if (user.password !== password) {
+      //   dispatch(setError('Invalid password'));
+      //   return;
+      // }
 
       // Save user data to Redux and localStorage
       dispatch(loginSuccess(user));
-      
+
       // Navigate to home page
       navigate('/');
     } catch (err) {
@@ -108,8 +108,8 @@ export default function Login() {
                     </Link>
                   </div>
 
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="w-100 mb-3"
                     style={{ backgroundColor: '#660ff1', border: 'none', padding: '12px' }}
                     disabled={loading}
