@@ -125,7 +125,7 @@ DJOSER = {
     "LOGIN_FIELD": "email",
     "SERIALIZERS": {
         "current_user": "api.serializers.UserSerializer",
-        "user_delete": "djoser.serializers.UserDeleteSerializer",
+        "user_create": "api.serializers.UserSerializer",
     },
 }
 
