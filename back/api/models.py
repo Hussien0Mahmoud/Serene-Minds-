@@ -173,17 +173,13 @@ class Resource(models.Model):
 
     TYPE_CHOICES = [
         ("Video", "Video"),
-        ("Article", "Article"),
-        ("Podcast", "Podcast"),
         ("Ebook", "Ebook"),
-        ("Tool", "Tool"),
     ]
 
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=100)
     description = models.TextField()
     category = models.CharField(max_length=100)
-    tags = models.JSONField(default=dict, blank=True)
     url = models.URLField()
     featured = models.BooleanField(default=False)
     thumbnail_url = models.URLField(blank=True, null=True)
