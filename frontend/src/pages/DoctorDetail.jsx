@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
 import { FaStar, FaVideo, FaPhoneAlt, FaUserMd, FaClock, FaCalendarAlt } from 'react-icons/fa';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { therapistApi } from '../api/api';
 import axios from 'axios';
 
@@ -19,12 +19,11 @@ export default function DoctorDetail() {
     const fetchDoctorAndAppointments = async () => {
       try {
         setLoading(true);
-        // Get auth token from localStorage or Redux store
-        const token = localStorage.getItem('access_token'); // or use Redux selector
+        const token = localStorage.getItem('access_token');
 
         const [doctorRes, appointmentsRes] = await Promise.all([
           therapistApi.getTherapistById(id),
-          axios.get('http://localhost:8000/api/appointments', {
+          axios.get('http://localhost:8000/api/appointments/', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -36,7 +35,7 @@ export default function DoctorDetail() {
           
           // Filter appointments for this doctor
           const doctorAppointments = appointmentsRes.data.results.filter(
-            app => app.therapistId === id
+            app => app.therapist === parseInt(id) && app.status !== 'Cancelled'
           );
           
           // Create array of booked slots
@@ -105,7 +104,13 @@ export default function DoctorDetail() {
     <div style={{ background: '#f8f9fa', minHeight: '100vh', paddingTop: '2rem' }}>
       <Container>
         {/* Doctor Profile Card */}
-        <Card className="border-0 shadow-sm mb-4">
+        <Card 
+          className="border-0 mb-4" 
+          style={{ 
+            boxShadow: 'rgba(102, 15, 241, 1) 0px 10px 50px',
+            transition: 'box-shadow 0.3s ease'
+          }}
+        >
           <Card.Body className="p-4">
             <Row>
               <Col md={3}>
@@ -176,7 +181,13 @@ export default function DoctorDetail() {
         </Card>
 
         {/* About Section */}
-        <Card className="border-0 shadow-sm mb-4">
+        <Card 
+          className="border-0 mb-4" 
+          style={{ 
+            boxShadow: 'rgba(102, 15, 241, 0.25) 0px 10px 50px',
+            transition: 'box-shadow 0.3s ease'
+          }}
+        >
           <Card.Body className="p-4">
             <h4 className="mb-3">About</h4>
             <p>{doctor.about}</p>
@@ -194,7 +205,13 @@ export default function DoctorDetail() {
         </Card>
 
         {/* Schedule Section */}
-        <Card className="border-0 shadow-sm mb-4">
+        <Card 
+          className="border-0 mb-4" 
+          style={{ 
+            boxShadow: 'rgba(102, 15, 241, 0.25) 0px 10px 50px',
+            transition: 'box-shadow 0.3s ease'
+          }}
+        >
           <Card.Body className="p-4">
             <h4 className="mb-4">Weekly Schedule</h4>
             <div className="mb-4">
@@ -240,7 +257,8 @@ export default function DoctorDetail() {
                                        selectedTime === slot.time ? 'white' : '#660ff1',
                                 cursor: isBooked ? 'not-allowed' : 'pointer',
                                 opacity: isBooked ? 0.65 : 1,
-                                textDecoration: isBooked ? 'line-through' : 'none'
+                                textDecoration: isBooked ? 'line-through' : 'none',
+                                border: isBooked ? '2px dashed #dee2e6' : undefined
                               }}
                               disabled={isBooked || !slot.is_available}
                             >
@@ -270,6 +288,18 @@ export default function DoctorDetail() {
           </Card.Body>
         </Card>
       </Container>
+      <div className='text-center mt-5'>
+      <Button 
+                style={{ backgroundColor: '#660ff1', border: 'none' }} 
+                size="lg" 
+                className="fw-bold text-white"
+              >
+                <Link to="/appointment" className="text-white text-decoration-none">
+                Back
+                </Link>
+                
+              </Button>
+      </div>
     </div>
   );
 }

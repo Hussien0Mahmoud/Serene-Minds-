@@ -25,6 +25,10 @@ export default function ManageUsers() {
     page: 1,
     hasMore: true
   });
+  const [passwordFields, setPasswordFields] = useState({
+    currentPassword: '',
+    newPassword: ''
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -97,17 +101,31 @@ export default function ManageUsers() {
         email: selectedUser.email,
         phone: selectedUser.phone,
         role: selectedUser.role,
-        password: selectedUser.password
       };
 
       if (selectedUser.id) {
-        // Update existing user
+        // Include password fields only if either is filled
+        if (passwordFields.currentPassword || passwordFields.newPassword) {
+          if (!passwordFields.currentPassword) {
+            alert('Current password is required to change password');
+            return;
+          }
+          if (!passwordFields.newPassword) {
+            alert('New password is required');
+            return;
+          }
+          userData.current_password = passwordFields.currentPassword;
+          userData.new_password = passwordFields.newPassword;
+        }
         await editUser(selectedUser.id, userData);
       } else {
-        // Create new user
+        // For new user, use single password field
+        userData.password = selectedUser.password;
         await addNewUser(userData);
       }
+      
       setShowModal(false);
+      setPasswordFields({ currentPassword: '', newPassword: '' });
       await fetchUsers();
       alert(selectedUser.id ? 'User updated successfully!' : 'New user added successfully!');
     } catch (error) {
@@ -204,6 +222,7 @@ export default function ManageUsers() {
                 role: 'user',
                 password: ''
               });
+              setPasswordFields({ currentPassword: '', newPassword: '' });
               setShowModal(true);
             }}
             style={{ 
@@ -363,7 +382,43 @@ export default function ManageUsers() {
               </Form.Select>
             </Form.Group>
 
-            {!selectedUser?.id && (
+            {selectedUser?.id ? (
+              // Edit user - show both password fields
+              <>
+                <Form.Group className="mb-3">
+                  <Form.Label>Current Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={passwordFields.currentPassword}
+                    onChange={(e) => setPasswordFields({
+                      ...passwordFields,
+                      currentPassword: e.target.value
+                    })}
+                    placeholder="Enter current password"
+                  />
+                  <Form.Text className="text-muted">
+                    Required only if changing password
+                  </Form.Text>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>New Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={passwordFields.newPassword}
+                    onChange={(e) => setPasswordFields({
+                      ...passwordFields,
+                      newPassword: e.target.value
+                    })}
+                    placeholder="Enter new password"
+                  />
+                  <Form.Text className="text-muted">
+                    Leave blank to keep current password
+                  </Form.Text>
+                </Form.Group>
+              </>
+            ) : (
+              // New user - show single password field
               <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
@@ -374,6 +429,7 @@ export default function ManageUsers() {
                     password: e.target.value
                   })}
                   required
+                  placeholder="Enter password"
                 />
               </Form.Group>
             )}

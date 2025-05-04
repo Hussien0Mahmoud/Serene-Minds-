@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { FaDownload, FaUsers, FaStar, FaArrowRight } from 'react-icons/fa';
 
 import '../../styles/home/hero.css';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
@@ -23,7 +24,10 @@ export default function Hero() {
                 size="lg" 
                 className="fw-bold text-white"
               >
+                <Link to="/appointment" className="text-white text-decoration-none">
                 Start Therapy
+                </Link>
+                
               </Button>
               <Button 
                 style={{ 
@@ -34,7 +38,13 @@ export default function Hero() {
                 size="lg" 
                 className="d-flex align-items-center gap-2"
               >
+                <Link to="/about" className="text-decoration-none " style={{ 
+                  backgroundColor: 'transparent', 
+                  color: '#660ff1'
+                }}> 
+
                 About Us <FaArrowRight />
+                </Link>
               </Button>
             </div>
             <Row className="mt-5">

@@ -3,22 +3,73 @@ import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
 import axios from 'axios';
 
-export default function EventsList() {
+export default function EventsList({ filters }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [filters]); // Re-fetch when filters change
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/events/');
-      setEvents(response.data.results || [response.data]); // Handle both array and single object
-      setLoading(false);
+      setLoading(true);
+      const params = new URLSearchParams();
+      
+      if (filters?.searchTerm) {
+        params.append('search', filters.searchTerm);
+      }
+      if (filters?.dateFilter && filters.dateFilter !== 'all') {
+        params.append('date_filter', filters.dateFilter);
+      }
+
+      const response = await axios.get(`http://localhost:8000/api/events/?${params}`);
+      const data = response.data.results || [response.data];
+      
+      // Client-side filtering as backup
+      const filteredEvents = data.filter(event => {
+        const matchesSearch = !filters?.searchTerm || 
+          event.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+          event.description.toLowerCase().includes(filters.searchTerm.toLowerCase());
+
+        let matchesDate = true;
+        if (filters?.dateFilter && filters.dateFilter !== 'all') {
+          const eventDate = new Date(event.date);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          switch (filters.dateFilter) {
+            case 'today':
+              matchesDate = eventDate.toDateString() === today.toDateString();
+              break;
+            case 'week':
+              const weekFromNow = new Date(today);
+              weekFromNow.setDate(today.getDate() + 7);
+              matchesDate = eventDate >= today && eventDate <= weekFromNow;
+              break;
+            case 'month':
+              const monthFromNow = new Date(today);
+              monthFromNow.setMonth(today.getMonth() + 1);
+              matchesDate = eventDate >= today && eventDate <= monthFromNow;
+              break;
+            case 'future':
+              matchesDate = eventDate >= today;
+              break;
+            default:
+              matchesDate = true;
+          }
+        }
+
+        return matchesSearch && matchesDate;
+      });
+
+      setEvents(filteredEvents);
+      setError(null);
     } catch (err) {
+      console.error('Error fetching events:', err);
       setError('Failed to fetch events');
+    } finally {
       setLoading(false);
     }
   };

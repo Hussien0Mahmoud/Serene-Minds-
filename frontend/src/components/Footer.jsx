@@ -1,15 +1,24 @@
-import { Container, Row, Col, ListGroup } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaHeart } from 'react-icons/fa';
+import Logo2 from "../assets/images/navbar/sereneLogo1.png";
 
 const Footer = () => {
   return (
     <footer className="bg-dark text-white py-5 mt-5">
       <Container>
         <Row>
-          <Col md={4} className="mb-4 mb-md-0">
-            <h5 className="text-uppercase mb-4">Mental Health Support</h5>
-            <p className="mb-4">
+          <Col md={4} className=" mb-md-0">
+            <div className="">
+              <img
+                alt="Serene Minds Logo"
+                src={Logo2}
+                width="125"
+                height="75"
+                className="d-inline-block align-top"
+              />
+            </div>
+            <p className="mb-2">
               Dedicated to providing professional mental health support and resources.
               Your journey to better mental health starts here.
             </p>
