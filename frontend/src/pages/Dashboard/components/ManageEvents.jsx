@@ -4,7 +4,12 @@ import { FaCalendar, FaClock, FaMapMarkerAlt, FaEdit, FaTrash, FaPlus } from 're
 import axios from 'axios';
 
 export default function ManageEvents() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState({
+    items: [],
+    count: 0,
+    next: null,
+    previous: null
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -17,8 +22,19 @@ export default function ManageEvents() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/api/events');
-      setEvents(response.data);
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get('http://localhost:8000/api/events/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      setEvents({
+        items: response.data.results || [],
+        count: response.data.count || 0,
+        next: response.data.next,
+        previous: response.data.previous
+      });
     } catch (err) {
       setError('Failed to fetch events');
       console.error(err);
@@ -30,29 +46,51 @@ export default function ManageEvents() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('access_token');
+      const eventData = {
+        title: selectedEvent.title,
+        date: selectedEvent.date,
+        time: selectedEvent.time,
+        location: selectedEvent.location,
+        category: selectedEvent.category,
+        capacity: parseInt(selectedEvent.capacity),
+        description: selectedEvent.description,
+        presenter: selectedEvent.presenter,
+        price: parseFloat(selectedEvent.price),
+        image: selectedEvent.image
+      };
+
       if (selectedEvent.id) {
-        await axios.put(`http://localhost:8000/api/events/${selectedEvent.id}`, selectedEvent);
+        await axios.patch(`http://localhost:8000/api/events/${selectedEvent.id}/`, eventData, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
       } else {
-        await axios.post('http://localhost:8000/api/events', {
-          ...selectedEvent,
-          id: Date.now().toString(),
-          registered: [],
-          spotsLeft: selectedEvent.capacity
+        await axios.post('http://localhost:8000/api/events/', eventData, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         });
       }
       setShowModal(false);
-      fetchEvents();
+      await fetchEvents();
       alert(selectedEvent.id ? 'Event updated successfully!' : 'Event added successfully!');
     } catch (error) {
-      setError('Failed to save event');
-      console.error(error);
+      console.error('Error saving event:', error);
+      setError(error.response?.data?.detail || 'Failed to save event');
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this event?')) {
       try {
-        await axios.delete(`http://localhost:8000/api/events/${id}`);
+        const token = localStorage.getItem('access_token');
+        await axios.delete(`http://localhost:8000/api/events/${id}/`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         fetchEvents();
       } catch (err) {
         setError('Failed to delete event');
@@ -111,10 +149,18 @@ export default function ManageEvents() {
                 </tr>
               </thead>
               <tbody>
-                {events.map((event) => (
+                {events.items.map((event) => (
                   <tr key={event.id}>
                     <td>
                       <div className="d-flex align-items-center">
+                        {event.image && (
+                          <img
+                            src={event.image}
+                            alt={event.title}
+                            className="rounded me-2"
+                            style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                          />
+                        )}
                         <div>
                           <div className="fw-bold">{event.title}</div>
                           <Badge bg="info">{event.category}</Badge>
@@ -122,20 +168,23 @@ export default function ManageEvents() {
                       </div>
                     </td>
                     <td>
-                      <div>{event.date}</div>
+                      <div>{new Date(event.date).toLocaleDateString()}</div>
                       <small className="text-muted">{event.time}</small>
                     </td>
                     <td>{event.location}</td>
                     <td>
-                      {event.spotsLeft} / {event.capacity}
+                      {event.spots_left} / {event.capacity}
                     </td>
-                    <td>${event.price}</td>
+                    <td>${parseFloat(event.price).toFixed(2)}</td>
                     <td>
                       <Button
                         variant="link"
                         className="me-2 p-0"
                         onClick={() => {
-                          setSelectedEvent(event);
+                          setSelectedEvent({
+                            ...event,
+                            price: parseFloat(event.price)
+                          });
                           setShowModal(true);
                         }}
                       >
@@ -151,6 +200,13 @@ export default function ManageEvents() {
                     </td>
                   </tr>
                 ))}
+                {events.items.length === 0 && (
+                  <tr>
+                    <td colSpan="6" className="text-center py-4">
+                      No events found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </Card.Body>

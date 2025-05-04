@@ -4,6 +4,7 @@ import { FaEdit, FaTrash, FaUserMd, FaStar, FaPlus, FaTimes } from 'react-icons/
 import { useDispatch, useSelector } from 'react-redux';
 import { setTherapists, setLoading, setError } from '../../../store/slices/therapistSlice';
 import { therapistApi } from '../../../api/api';
+import axios from 'axios';
 
 const colors = {
   primary: '#660ff1',
@@ -53,8 +54,30 @@ export default function ManageTherapists() {
     try {
       dispatch(setLoading(true));
       const response = await therapistApi.getAllTherapists();
-      dispatch(setTherapists(response.data));
+      const therapistsData = response.data.results || [response.data];
+      
+      const transformedData = therapistsData.map(therapist => ({
+        id: therapist.id,
+        user_id: therapist.user.id,
+        name: therapist.user.username,
+        email: therapist.user.email,
+        specialty: therapist.specialty,
+        experience: therapist.experience,
+        availability: therapist.availability,
+        price: therapist.price,
+        languages: Array.isArray(therapist.languages) ? therapist.languages : [],
+        specializations: Array.isArray(therapist.specializations) ? therapist.specializations : [],
+        education: Array.isArray(therapist.education) ? therapist.education : [],
+        about: therapist.about,
+        rating: therapist.rating,
+        reviews_count: therapist.reviews_count,
+        image: therapist.user.profile_image,
+        time_slots: therapist.time_slots
+      }));
+
+      dispatch(setTherapists(transformedData));
     } catch (error) {
+      console.error('Error fetching therapists:', error);
       dispatch(setError('Failed to fetch therapists'));
     } finally {
       dispatch(setLoading(false));
@@ -69,13 +92,31 @@ export default function ManageTherapists() {
       Thursday: [],
       Friday: [],
       Saturday: [],
-      Sunday: [],
-      ...therapist.schedule
+      Sunday: []
     };
     
+    if (Array.isArray(therapist.time_slots)) {
+      therapist.time_slots.forEach(slot => {
+        if (schedule[slot.day]) {
+          schedule[slot.day].push(slot.time);
+        }
+      });
+    }
+    
     setSelectedTherapist({
-      ...therapist,
-      schedule
+      id: therapist.id,
+      name: therapist.name,
+      email: therapist.email,
+      specialty: therapist.specialty,
+      experience: therapist.experience,
+      availability: therapist.availability,
+      price: therapist.price,
+      languages: therapist.languages || [],
+      specializations: therapist.specializations || [],
+      education: therapist.education || [],
+      about: therapist.about,
+      schedule: schedule,
+      user_id: therapist.user_id
     });
     setShowModal(true);
   };
@@ -89,11 +130,11 @@ export default function ManageTherapists() {
       try {
         dispatch(setLoading(true));
         await therapistApi.deleteTherapist(id);
-        fetchTherapists();
+        await fetchTherapists();
         alert('Therapist deleted successfully!');
       } catch (error) {
         console.error('Error deleting therapist:', error);
-        dispatch(setError('Failed to delete therapist. Please try again.'));
+        dispatch(setError(error.response?.data?.message || 'Failed to delete therapist'));
       } finally {
         dispatch(setLoading(false));
       }
@@ -103,50 +144,67 @@ export default function ManageTherapists() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const schedule = {
-      Monday: selectedTherapist.schedule?.Monday || [],
-      Tuesday: selectedTherapist.schedule?.Tuesday || [],
-      Wednesday: selectedTherapist.schedule?.Wednesday || [],
-      Thursday: selectedTherapist.schedule?.Thursday || [],
-      Friday: selectedTherapist.schedule?.Friday || [],
-      Saturday: selectedTherapist.schedule?.Saturday || [],
-      Sunday: selectedTherapist.schedule?.Sunday || []
-    };
-
-    const therapistData = {
-      ...selectedTherapist,
-      schedule,
-      languages: selectedTherapist.languages || [],
-      specializations: selectedTherapist.specializations || [],
-      education: selectedTherapist.education || [],
-      image: selectedTherapist.image || `https://ui-avatars.com/api/?name=${selectedTherapist.name}`,
-      password: selectedTherapist.password || '123456',
-      rating: selectedTherapist.rating || 0,
-      reviews: selectedTherapist.reviews || 0,
-      about: selectedTherapist.about || ''
-    };
-
-    const validationErrors = validateTherapist(therapistData);
-    if (validationErrors.length > 0) {
-      dispatch(setError(validationErrors.join('\n')));
-      return;
-    }
-
     try {
       dispatch(setLoading(true));
-      if (selectedTherapist.id) {
-        await therapistApi.updateTherapist(selectedTherapist.id, therapistData);
-      } else {
+
+      if (!selectedTherapist.id) {
+        const userResponse = await axios.post('http://localhost:8000/auth/users/', {
+          username: selectedTherapist.name,
+          email: selectedTherapist.email,
+          password: '123456',
+          role: 'therapist'
+        });
+
+        const therapistData = {
+          user_id: userResponse.data.id,
+          specialty: selectedTherapist.specialty,
+          experience: parseInt(selectedTherapist.experience) || 0,
+          availability: selectedTherapist.availability || false,
+          price: parseFloat(selectedTherapist.price) || 0,
+          languages: selectedTherapist.languages || [],
+          specializations: selectedTherapist.specializations || [],
+          education: selectedTherapist.education || [],
+          about: selectedTherapist.about || '',
+          time_slots: selectedTherapist.schedule || {}
+        };
+
         await therapistApi.createTherapist(therapistData);
+      } else {
+        const therapistData = {
+          user_id: selectedTherapist.user_id,
+          specialty: selectedTherapist.specialty,
+          experience: parseInt(selectedTherapist.experience) || 0,
+          availability: selectedTherapist.availability || false,
+          price: parseFloat(selectedTherapist.price) || 0,
+          languages: selectedTherapist.languages || [],
+          specializations: selectedTherapist.specializations || [],
+          education: selectedTherapist.education || [],
+          about: selectedTherapist.about || '',
+          schedule: selectedTherapist.schedule
+        };
+
+        const token = localStorage.getItem('access_token');
+        await axios.patch(
+          `http://localhost:8000/api/therapists/${selectedTherapist.id}/`,
+          therapistData,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        setShowModal(false);
+        await fetchTherapists();
+        alert('Therapist updated successfully!');
       }
-      
-      setShowModal(false);
-      fetchTherapists();
-      alert(selectedTherapist.id ? 'Therapist updated successfully!' : 'New therapist added successfully!');
-      
     } catch (error) {
       console.error('Error saving therapist:', error);
-      dispatch(setError('Failed to save therapist. Please try again.'));
+      const errorMessage = error.response?.data?.detail || 
+                          Object.values(error.response?.data || {}).flat().join('\n') ||
+                          'Failed to save therapist';
+      dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
     }
@@ -380,7 +438,8 @@ export default function ManageTherapists() {
                 <Form.Group className="mb-3">
                   <Form.Label>Experience</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="number"
+                    min="0"
                     value={selectedTherapist?.experience || ''}
                     onChange={(e) => setSelectedTherapist({
                       ...selectedTherapist,

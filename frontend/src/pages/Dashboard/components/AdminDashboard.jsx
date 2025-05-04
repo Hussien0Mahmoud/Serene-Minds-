@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { 
   FaUserMd, FaUsers, FaCalendarCheck, FaBookReader,
-  FaChartLine, FaPercent, FaStar 
+FaPercent, FaCalendarAlt
 } from 'react-icons/fa';
 import axios from 'axios';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+// Chart options
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'bottom',
+    },
+    title: {
+      display: true,
+      text: 'Appointments Distribution'
+    }
+  }
+};
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState([]);
+  const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,129 +52,134 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const [
-        therapistsRes,
-        usersRes,
-        appointmentsRes,
-        resourcesRes,
-        eventsRes,
-        adminStatsRes
-      ] = await Promise.all([
-        axios.get('http://localhost:8000/api/therapists'),
-        axios.get('http://localhost:8000/api/users'),
-        axios.get('http://localhost:8000/api/appointments'),
-        axios.get('http://localhost:8000/api/resources'),
-        axios.get('http://localhost:8000/api/events'),
-        axios.get('http://localhost:8000/api/adminStats')
-      ]);
+      setLoading(true);
+      const response = await axios.get('http://localhost:8000/api/admin-stats/dashboard/', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
 
-      // Calculate active users (users with role "user")
-      const activeUsers = usersRes.data.filter(user => user.role === 'user').length;
+      const { stats: adminStats, appointments_by_status, upcoming_events } = response.data;
 
-      // Get total appointments count
-      const totalAppointments = appointmentsRes.data.length;
-
-      // Calculate average rating from therapists
-      const totalRatings = therapistsRes.data.reduce((acc, curr) => acc + (curr.rating || 0), 0);
-      const averageRating = (totalRatings / therapistsRes.data.length).toFixed(1);
-
+      // Transform the stats data
       setStats([
         {
           title: "Total Therapists",
-          value: therapistsRes.data.length,
+          value: adminStats.total_therapists,
           icon: FaUserMd,
           color: "#4A90E2",
-          change: "+12%"
+          change: `${adminStats.user_growth}%`
         },
         {
           title: "Active Users",
-          value: activeUsers,
+          value: adminStats.active_users,
           icon: FaUsers,
           color: "#50E3C2",
-          change: "+8%"
+          change: `${adminStats.user_growth}%`
         },
         {
-          title: "Total Appointments",
-          value: totalAppointments,
+          title: "Today's Appointments",
+          value: adminStats.appointments_today,
           icon: FaCalendarCheck,
           color: "#FF6B6B",
-          change: "+15%"
+          change: "Today"
         },
         {
           title: "Total Resources",
-          value: resourcesRes.data.length,
+          value: adminStats.total_resources,
           icon: FaBookReader,
           color: "#FFD93D",
           change: "+20%"
         },
         {
           title: "Success Rate",
-          value: `${adminStatsRes.data.successRate}%`,
+          value: `${adminStats.success_rate}%`,
           icon: FaPercent,
           color: "#4CAF50",
-          change: "+5%"
+          change: `+${adminStats.success_rate}%`
         },
         {
-          title: "Average Rating",
-          value: averageRating,
-          icon: FaStar,
+          title: "Upcoming Events",
+          value: upcoming_events,
+          icon: FaCalendarAlt,
           color: "#F6C90E",
-          change: "+10%"
+          change: "Future"
         }
       ]);
 
+      // Update appointment status chart data
+      if (appointments_by_status) {
+        setChartData({
+          labels: appointments_by_status.map(item => item.status),
+          datasets: [{
+            data: appointments_by_status.map(item => item.count),
+            backgroundColor: [
+              '#4A90E2', // Confirmed
+              '#50E3C2', // Completed
+              '#FF6B6B', // Cancelled
+              '#FFD93D'  // Pending
+            ]
+          }]
+        });
+      }
+
     } catch (error) {
       console.error('Error fetching stats:', error);
-      setError('Failed to fetch dashboard data');
+      setError(error.response?.data?.detail || 'Failed to fetch dashboard data');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="alert alert-danger m-4" role="alert">
-        {error}
-      </div>
-    );
-  }
-
   return (
     <Container fluid className="py-4">
-      <h4 className="mb-4">Dashboard Overview</h4>
-      <Row className="g-4">
-        {stats?.map((stat, index) => (
-          <Col key={index} md={4}>
-            <Card className="border-0 shadow-sm h-100">
-              <Card.Body>
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <div
-                    className="rounded-circle p-3"
-                    style={{ backgroundColor: `${stat.color}15` }}
-                  >
-                    <stat.icon size={24} color={stat.color} />
-                  </div>
-                  <span className={`badge ${stat.change.startsWith('+') ? 'bg-success' : 'bg-danger'}`}>
-                    {stat.change}
-                  </span>
-                </div>
-                <h3 className="mb-2">{stat.value}</h3>
-                <p className="text-muted mb-0">{stat.title}</p>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : error ? (
+        <Alert variant="danger">{error}</Alert>
+      ) : (
+        <>
+          <Row className="g-4 mb-4">
+            {stats.map((stat, index) => (
+              <Col key={index} md={4}>
+                <Card className="border-0 shadow-sm h-100">
+                  <Card.Body className="d-flex align-items-center">
+                    <div
+                      className="rounded-circle p-3 me-3"
+                      style={{ backgroundColor: `${stat.color}20` }}
+                    >
+                      <stat.icon size={24} color={stat.color} />
+                    </div>
+                    <div>
+                      <h6 className="mb-0 text-muted">{stat.title}</h6>
+                      <h4 className="mb-0">{stat.value}</h4>
+                      <small className="text-success">{stat.change}</small>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+
+          {/* Additional dashboard components like charts */}
+          {chartData && (
+            <Row>
+              <Col md={6}>
+                <Card className="border-0 shadow-sm">
+                  <Card.Body>
+                    <h5 className="mb-4">Appointments by Status</h5>
+                    <Doughnut data={chartData} options={chartOptions} />
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          )}
+        </>
+      )}
     </Container>
   );
 }

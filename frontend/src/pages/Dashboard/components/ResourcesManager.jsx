@@ -3,14 +3,46 @@ import { Container, Row, Col, Card, Table, Button, Badge, Modal, Form, Nav } fro
 import { FaEdit, FaTrash, FaPlus, FaTimes, FaBook, FaVideo } from 'react-icons/fa';
 import axios from 'axios';
 
+const RESOURCE_TYPES = {
+  books: 'Ebook',
+  videos: 'Video'
+};
+
+const CATEGORIES = {
+  ANXIETY: 'Anxiety & Depression',
+  STRESS: 'Stress Management',
+  RELATIONSHIPS: 'Relationships',
+  SELF_HELP: 'Self-Help',
+  MINDFULNESS: 'Mindfulness'
+};
+
 export default function ResourcesManager() {
-  const [resources, setResources] = useState([]);
+  const [resources, setResources] = useState({
+    items: [],
+    count: 0,
+    next: null,
+    previous: null
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
   const [activeTab, setActiveTab] = useState('books');
   const [newTag, setNewTag] = useState('');
+
+  const emptyResource = {
+    title: '',
+    author: '',
+    description: '',
+    category: '',
+    url: '',
+    type: activeTab === 'books' ? RESOURCE_TYPES.books : RESOURCE_TYPES.videos,
+    duration: '',
+    thumbnail_url: '',
+    featured: false,
+    rating: 0,
+    reviews_count: 0
+  };
 
   useEffect(() => {
     fetchResources();
@@ -19,11 +51,26 @@ export default function ResourcesManager() {
   const fetchResources = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8000/api/resources?type=${activeTab === 'books' ? 'E-Book' : 'Video'}`);
-      setResources(response.data);
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get('http://localhost:8000/api/resources/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        params: {
+          type: activeTab === 'books' ? RESOURCE_TYPES.books : RESOURCE_TYPES.videos
+        }
+      });
+      
+      setResources({
+        items: response.data.results || [],
+        count: response.data.count || 0,
+        next: response.data.next,
+        previous: response.data.previous
+      });
+      setError(null);
     } catch (err) {
-      setError('Failed to fetch resources');
-      console.error(err);
+      console.error('Error fetching resources:', err);
+      setError(err.response?.data?.detail || 'Failed to fetch resources');
     } finally {
       setLoading(false);
     }
@@ -33,26 +80,46 @@ export default function ResourcesManager() {
     e.preventDefault();
     try {
       setLoading(true);
+      const token = localStorage.getItem('access_token');
+      
       const resourceData = {
-        ...selectedResource,
-        type: activeTab === 'books' ? 'E-Book' : 'Video',
-        rating: selectedResource.rating || 0,
-        reviews: selectedResource.reviews || 0
+        title: selectedResource.title,
+        author: selectedResource.author,
+        description: selectedResource.description,
+        category: selectedResource.category,
+        url: selectedResource.url,
+        type: activeTab === 'books' ? RESOURCE_TYPES.books : RESOURCE_TYPES.videos,
+        duration: activeTab === 'videos' ? selectedResource.duration : null,
+        thumbnail_url: selectedResource.thumbnail_url,
+        featured: selectedResource.featured || false
+      };
+
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       };
 
       if (selectedResource.id) {
-        await axios.put(`http://localhost:8000/api/resources/${selectedResource.id}`, resourceData);
+        await axios.patch(
+          `http://localhost:8000/api/resources/${selectedResource.id}/`, 
+          resourceData,
+          config
+        );
       } else {
-        await axios.post('http://localhost:8000/api/resources', {
-          ...resourceData,
-          id: Date.now().toString()
-        });
+        await axios.post('http://localhost:8000/api/resources/', resourceData, config);
       }
+      
       setShowModal(false);
-      fetchResources();
+      await fetchResources();
       alert(selectedResource.id ? 'Resource updated successfully!' : 'New resource added successfully!');
     } catch (error) {
-      setError('Failed to save resource');
+      console.error('Error saving resource:', error);
+      const errorMessage = error.response?.data?.detail || 
+                          Object.values(error.response?.data || {}).flat().join('\n') ||
+                          'Failed to save resource';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -116,16 +183,7 @@ export default function ResourcesManager() {
         <Col className="text-end">
           <Button 
             onClick={() => {
-              setSelectedResource({
-                title: '',
-                author: '',
-                description: '',
-                category: '',
-                tags: [],
-                url: '',
-                featured: false,
-                thumbnailUrl: ''
-              });
+              setSelectedResource(emptyResource);
               setShowModal(true);
             }}
             style={{ backgroundColor: '#660ff1', border: 'none' }}
@@ -158,19 +216,21 @@ export default function ResourcesManager() {
                 </tr>
               </thead>
               <tbody>
-                {resources.map((resource) => (
+                {resources.items.map((resource) => (
                   <tr key={resource.id}>
                     <td>
                       <div className="d-flex align-items-center">
                         <img
-                          src={resource.thumbnailUrl}
+                          src={resource.thumbnail_url || `https://via.placeholder.com/40`}
                           alt={resource.title}
                           className="me-2"
                           style={{ width: '40px', height: '40px', objectFit: 'cover' }}
                         />
                         <div>
                           <div className="fw-bold">{resource.title}</div>
-                          <small className="text-muted">{resource.description?.substring(0, 50)}...</small>
+                          <small className="text-muted">
+                            {resource.description?.substring(0, 50)}...
+                          </small>
                         </div>
                       </div>
                     </td>
@@ -178,7 +238,7 @@ export default function ResourcesManager() {
                     <td>
                       <Badge bg="info">{resource.category}</Badge>
                     </td>
-                    <td>{resource.rating} ({resource.reviews} reviews)</td>
+                    <td>{resource.rating} ({resource.reviews_count || 0} reviews)</td>
                     <td>
                       <Button
                         variant="link"
@@ -200,6 +260,13 @@ export default function ResourcesManager() {
                     </td>
                   </tr>
                 ))}
+                {resources.items.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="text-center py-4">
+                      No {activeTab === 'books' ? 'books' : 'videos'} found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </Card.Body>
@@ -272,11 +339,11 @@ export default function ResourcesManager() {
                     required
                   >
                     <option value="">Select Category</option>
-                    <option value="Anxiety & Depression">Anxiety & Depression</option>
-                    <option value="Stress Management">Stress Management</option>
-                    <option value="Relationships">Relationships</option>
-                    <option value="Self-Help">Self-Help</option>
-                    <option value="Mindfulness">Mindfulness</option>
+                    <option value={CATEGORIES.ANXIETY}>{CATEGORIES.ANXIETY}</option>
+                    <option value={CATEGORIES.STRESS}>{CATEGORIES.STRESS}</option>
+                    <option value={CATEGORIES.RELATIONSHIPS}>{CATEGORIES.RELATIONSHIPS}</option>
+                    <option value={CATEGORIES.SELF_HELP}>{CATEGORIES.SELF_HELP}</option>
+                    <option value={CATEGORIES.MINDFULNESS}>{CATEGORIES.MINDFULNESS}</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -314,12 +381,11 @@ export default function ResourcesManager() {
               <Form.Label>Thumbnail URL</Form.Label>
               <Form.Control
                 type="url"
-                value={selectedResource?.thumbnailUrl || ''}
+                value={selectedResource?.thumbnail_url || ''}
                 onChange={(e) => setSelectedResource({
                   ...selectedResource,
-                  thumbnailUrl: e.target.value
+                  thumbnail_url: e.target.value
                 })}
-                required
               />
             </Form.Group>
 

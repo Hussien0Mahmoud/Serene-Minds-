@@ -5,7 +5,12 @@ import axios from 'axios';
 
 export default function Resources() {
   const [activeTab, setActiveTab] = useState('books');
-  const [resources, setResources] = useState([]);
+  const [resources, setResources] = useState({
+    items: [],
+    count: 0,
+    next: null,
+    previous: null
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,19 +41,40 @@ export default function Resources() {
   const fetchResources = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8000/api/resources?type=${activeTab === 'books' ? 'E-Book' : 'Video'}`);
-      setResources(response.data);
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get(
+        `http://localhost:8000/api/resources/`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          params: {
+            type: activeTab === 'books' ? 'Ebook' : 'Video'
+          }
+        }
+      );
+
+      setResources({
+        items: response.data.results || [],
+        count: response.data.count || 0,
+        next: response.data.next,
+        previous: response.data.previous
+      });
+      setError(null);
     } catch (err) {
+      console.error('Error fetching resources:', err);
       setError('Failed to fetch resources');
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredResources = resources.filter(resource => {
-    const matchesSearch = resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         resource.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || resource.category === selectedCategory;
+  const filteredResources = resources.items.filter(resource => {
+    const matchesSearch = searchTerm === '' || (
+      (resource?.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (resource?.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+    );
+    const matchesCategory = selectedCategory === 'all' || resource?.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -158,7 +184,7 @@ export default function Resources() {
                 <div className="position-relative">
                   <Card.Img 
                     variant="top" 
-                    src={resource.thumbnailUrl || resource.image}
+                    src={resource.thumbnail_url || 'placeholder-image-url'} 
                     style={{ height: '200px', objectFit: 'cover' }}
                   />
                   {resource.type === 'Video' && (
@@ -171,12 +197,24 @@ export default function Resources() {
                   )}
                   <Badge 
                     className="position-absolute top-0 end-0 m-2"
-                    style={{                       backgroundColor: '#660ff1', // Changed from colorPalette.base
-                      color: '#ffffff'  // White text for better contrast
+                    style={{ 
+                      backgroundColor: '#660ff1',
+                      color: '#ffffff'
                     }}
                   >
                     {resource.category}
                   </Badge>
+                  {resource.featured && (
+                    <Badge 
+                      className="position-absolute top-0 start-0 m-2"
+                      style={{ 
+                        backgroundColor: '#F6C90E',
+                        color: '#000000'
+                      }}
+                    >
+                      Featured
+                    </Badge>
+                  )}
                 </div>
                 <Card.Body className="d-flex flex-column">
                   <h5 style={{ color: colorPalette.text.dark }}>{resource.title}</h5>
@@ -186,40 +224,25 @@ export default function Resources() {
                   
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <small style={{ color: colorPalette.base }}>By {resource.author}</small>
-                    {resource.type === 'Video' && (
-                      <small style={{ color: colorPalette.text.dark }}>{resource.duration}</small>
+                    {resource.duration && (
+                      <small style={{ color: colorPalette.text.dark }}>
+                        {resource.duration} {resource.type === 'Video' ? 'min' : 'hrs'}
+                      </small>
                     )}
                   </div>
 
-                  <div className="mb-3">
-                    {resource.tags.map((tag, i) => (
-                      <Badge 
-                        key={i} 
-                        className="me-2 mb-2"
-                        style={{ 
-                          backgroundColor: '#660ff1', // Light purple background
-                          color: '#fff', // Purple text
-                          border: '1px solid rgba(102, 15, 241, 0.3)',
-                          transition: 'all 0.3s ease'
-                        }}
-                        onMouseOver={(e) => {
-                          e.target.style.backgroundColor = '#660ff1';
-                          e.target.style.color = 'white';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.backgroundColor = '#660ff1';
-                          e.target.style.color = '#fff';
-                        }}
-                      >
-                        #{tag}
-                      </Badge>
-                    ))}
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div className="d-flex align-items-center">
+                      <span className="text-warning me-1">★</span>
+                      <small>{parseFloat(resource.rating).toFixed(1)}</small>
+                      <small className="text-muted ms-1">({resource.reviews_count} reviews)</small>
+                    </div>
                   </div>
 
                   <Button 
                     variant="primary" 
                     className="w-100 mt-auto"
-                    href={resource.url || resource.bookUrl}
+                    href={resource.url}
                     target="_blank"
                     style={{ 
                       backgroundColor: colorPalette.base,
@@ -237,7 +260,7 @@ export default function Resources() {
                     ) : (
                       <>
                         <FaDownload className="me-2" />
-                        Buy Now
+                        Read Now
                       </>
                     )}
                   </Button>

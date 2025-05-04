@@ -4,7 +4,12 @@ import { FaCalendarCheck, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
 
 export default function AppointmentsList() {
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState({
+    items: [],
+    count: 0,
+    next: null,
+    previous: null
+  });
   const [therapists, setTherapists] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,30 +25,37 @@ export default function AppointmentsList() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [appointmentsRes, therapistsRes, usersRes] = await Promise.all([
-        axios.get('http://localhost:8000/api/appointments'),
-        axios.get('http://localhost:8000/api/therapists'),
-        axios.get('http://localhost:8000/api/users')
-      ]);
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get('http://localhost:8000/api/appointments/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-      setAppointments(appointmentsRes.data);
-      setTherapists(therapistsRes.data);
-      setUsers(usersRes.data);
+      setAppointments({
+        items: response.data.results || [],
+        count: response.data.count || 0,
+        next: response.data.next,
+        previous: response.data.previous
+      });
     } catch (err) {
+      console.error('Error fetching appointments:', err);
       setError('Failed to fetch appointments data');
     } finally {
       setLoading(false);
     }
   };
 
-  const getTherapistName = (therapistId) => {
-    const therapist = therapists.find(t => t.id === therapistId);
-    return therapist ? therapist.name : 'Unknown Therapist';
-  };
-
-  const getUserName = (userId) => {
-    const user = users.find(u => u.id === userId);
-    return user ? user.name : 'Unknown User';
+  const getStatusBadgeColor = (status) => {
+    if (!status) return 'secondary'; // Return a default color if status is undefined/null
+    
+    switch (status.toLowerCase()) {
+      case 'confirmed': return 'success';
+      case 'pending': return 'warning';
+      case 'cancelled': return 'danger';
+      case 'completed': return 'info';
+      default: return 'primary';
+    }
   };
 
   const handleEdit = (appointment) => {
@@ -59,12 +71,32 @@ export default function AppointmentsList() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8000/api/appointments/${selectedAppointment.id}`, selectedAppointment);
+      const token = localStorage.getItem('access_token');
+      const updatedData = {
+        date: selectedAppointment.date,
+        time: selectedAppointment.time,
+        status: selectedAppointment.status,
+        type: selectedAppointment.type,
+        notes: selectedAppointment.notes,
+        duration: selectedAppointment.duration
+      };
+
+      await axios.patch(
+        `http://localhost:8000/api/appointments/${selectedAppointment.id}/`, 
+        updatedData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
       setShowModal(false);
-      fetchData();
+      await fetchData();
       alert('Appointment updated successfully!');
     } catch (err) {
-      setError('Failed to update appointment');
+      console.error('Error updating appointment:', err);
+      setError(err.response?.data?.detail || 'Failed to update appointment');
     }
   };
 
@@ -76,18 +108,6 @@ export default function AppointmentsList() {
       } catch (err) {
         setError('Failed to delete appointment');
       }
-    }
-  };
-
-  const getStatusBadgeColor = (status) => {
-    if (!status) return 'secondary'; // Return a default color if status is undefined/null
-    
-    switch (status.toLowerCase()) {
-      case 'confirmed': return 'success';
-      case 'pending': return 'warning';
-      case 'cancelled': return 'danger';
-      case 'completed': return 'info';
-      default: return 'primary';
     }
   };
 
@@ -126,14 +146,14 @@ export default function AppointmentsList() {
                 </tr>
               </thead>
               <tbody>
-                {appointments.map((appointment) => (
+                {appointments.items.map((appointment) => (
                   <tr key={appointment.id}>
                     <td>
                       <div className="fw-bold">{appointment.date}</div>
                       <small className="text-muted">{appointment.time}</small>
                     </td>
-                    <td>{getUserName(appointment.userId)}</td>
-                    <td>{getTherapistName(appointment.therapistId)}</td>
+                    <td>{appointment.user_name}</td>
+                    <td>{appointment.therapist_name}</td>
                     <td>
                       <Badge bg="info">{appointment.type}</Badge>
                     </td>
@@ -144,7 +164,7 @@ export default function AppointmentsList() {
                     </td>
                     <td>
                       <div className="fw-bold">
-                        ${appointment.payment?.amount || 'N/A'}
+                        ${parseFloat(appointment.payment?.amount).toFixed(2)}
                       </div>
                       <small className={`text-${appointment.payment?.status === 'Paid' ? 'success' : 'warning'}`}>
                         {appointment.payment?.status}
@@ -178,6 +198,13 @@ export default function AppointmentsList() {
                     </td>
                   </tr>
                 ))}
+                {appointments.items.length === 0 && (
+                  <tr>
+                    <td colSpan="7" className="text-center py-4">
+                      No appointments found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </Card.Body>
@@ -287,8 +314,8 @@ export default function AppointmentsList() {
         </Modal.Header>
         <Modal.Body>
           <div className="appointment-details">
-            <p><strong>Patient:</strong> {getUserName(selectedAppointment?.userId)}</p>
-            <p><strong>Therapist:</strong> {getTherapistName(selectedAppointment?.therapistId)}</p>
+            <p><strong>Patient:</strong> {selectedAppointment?.user_name}</p>
+            <p><strong>Therapist:</strong> {selectedAppointment?.therapist_name}</p>
             <p><strong>Date:</strong> {selectedAppointment?.date}</p>
             <p><strong>Time:</strong> {selectedAppointment?.time}</p>
             <p><strong>Type:</strong> {selectedAppointment?.type}</p>

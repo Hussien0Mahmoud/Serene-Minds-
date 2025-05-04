@@ -21,16 +21,44 @@ export default function ManageUsers() {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    hasMore: true
+  });
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (loadMore = false) => {
     try {
       setLoading(true);
-      const response = await getAllUsers();
-      setUsers(response.data);
+      const response = await getAllUsers(loadMore ? pagination.page + 1 : 1);
+      const usersData = response.data.results || [];
+      
+      const transformedUsers = usersData.map(user => ({
+        id: user.id,
+        name: user.name === 'Anon' ? user.username : user.name,
+        email: user.email,
+        phone: user.phone || '',
+        role: user.role,
+        profileImage: user.profile_image,
+        dateJoined: user.date_joined
+      }));
+      
+      if (loadMore) {
+        setUsers(prev => [...prev, ...transformedUsers]);
+        setPagination(prev => ({
+          page: prev.page + 1,
+          hasMore: response.data.next !== null
+        }));
+      } else {
+        setUsers(transformedUsers);
+        setPagination({
+          page: 1,
+          hasMore: response.data.next !== null
+        });
+      }
     } catch (error) {
       setError('Failed to fetch users');
       console.error(error);
@@ -64,25 +92,102 @@ export default function ManageUsers() {
     e.preventDefault();
     try {
       setLoading(true);
+      const userData = {
+        username: selectedUser.name,
+        email: selectedUser.email,
+        phone: selectedUser.phone,
+        role: selectedUser.role,
+        password: selectedUser.password
+      };
+
       if (selectedUser.id) {
-        await editUser(selectedUser.id, selectedUser);
+        // Update existing user
+        await editUser(selectedUser.id, userData);
       } else {
-        await addNewUser({
-          ...selectedUser,
-          dateJoined: new Date().toISOString(),
-          profileImage: `https://ui-avatars.com/api/?name=${selectedUser.name.replace(/ /g, '+')}`,
-          password: selectedUser.password || '123456'
-        });
+        // Create new user
+        await addNewUser(userData);
       }
       setShowModal(false);
-      fetchUsers();
+      await fetchUsers();
       alert(selectedUser.id ? 'User updated successfully!' : 'New user added successfully!');
     } catch (error) {
-      setError('Failed to save user');
+      setError(error.response?.data?.detail || 'Failed to save user');
       console.error(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const PaginationControls = () => {
+    const pages = Array.from({ length: pagination.totalPages }, (_, i) => i + 1);
+    
+    return (
+      <div className="d-flex justify-content-end mt-4 gap-2">
+        <Button
+          variant="outline-primary"
+          size="sm"
+          disabled={pagination.currentPage === 1}
+          onClick={() => fetchUsers(pagination.currentPage - 1)}
+        >
+          Previous
+        </Button>
+        
+        {pages.map(page => (
+          <Button
+            key={page}
+            variant={page === pagination.currentPage ? "primary" : "outline-primary"}
+            size="sm"
+            onClick={() => fetchUsers(page)}
+          >
+            {page}
+          </Button>
+        ))}
+        
+        <Button
+          variant="outline-primary"
+          size="sm"
+          disabled={pagination.currentPage === pagination.totalPages}
+          onClick={() => fetchUsers(pagination.currentPage + 1)}
+        >
+          Next
+        </Button>
+      </div>
+    );
+  };
+
+  const LoadMoreButton = () => {
+    if (!pagination.hasMore) return null;
+    
+    return (
+      <div className="text-center mt-4">
+        <Button
+          variant="outline-primary"
+          onClick={() => fetchUsers(true)}
+          disabled={loading}
+          style={{ 
+            borderColor: colors.primary,
+            color: colors.primary
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = colors.primaryLight;
+            e.target.style.borderColor = colors.primary;
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = 'transparent';
+            e.target.style.borderColor = colors.primary;
+          }}
+        >
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" />
+              Loading...
+            </>
+          ) : (
+            'Load More'
+          )}
+        </Button>
+      </div>
+    );
   };
 
   return (
@@ -141,7 +246,7 @@ export default function ManageUsers() {
                     <td>
                       <div className="d-flex align-items-center">
                         <img
-                          src={user.profileImage || `https://ui-avatars.com/api/?name=${user.name}`}
+                          src={user.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`}
                           alt={user.name}
                           className="rounded-circle me-2"
                           style={{ width: '40px', height: '40px', objectFit: 'cover' }}
@@ -161,7 +266,7 @@ export default function ManageUsers() {
                         {user.role}
                       </Badge>
                     </td>
-                    <td>{user.phone}</td>
+                    <td>{user.phone || 'N/A'}</td>
                     <td>{new Date(user.dateJoined).toLocaleDateString()}</td>
                     <td>
                       <Button
@@ -183,6 +288,7 @@ export default function ManageUsers() {
                 ))}
               </tbody>
             </Table>
+            <LoadMoreButton />
           </Card.Body>
         </Card>
       )}

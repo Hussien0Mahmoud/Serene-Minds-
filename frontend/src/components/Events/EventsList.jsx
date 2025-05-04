@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Badge, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
 import axios from 'axios';
 
@@ -7,7 +7,6 @@ export default function EventsList() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState('all');
 
   useEffect(() => {
     fetchEvents();
@@ -15,40 +14,20 @@ export default function EventsList() {
 
   const fetchEvents = async () => {
     try {
-      setLoading(true);
-      const response = await axios.get('http://localhost:8000/api/events');
-      setEvents(response.data);
+      const response = await axios.get('http://localhost:8000/api/events/');
+      setEvents(response.data.results || [response.data]); // Handle both array and single object
+      setLoading(false);
     } catch (err) {
       setError('Failed to fetch events');
-    } finally {
       setLoading(false);
     }
   };
 
-  const filteredEvents = selectedDate === 'all' 
-    ? events 
-    : events.filter(event => event.date === selectedDate);
-
-  const uniqueDates = ['all', ...new Set(events.map(event => event.date))];
-
   return (
     <Container className="py-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Upcoming Events</h2>
-        <Form.Select 
-          style={{ width: 'auto' }}
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        >
-          <option value="all">All Dates</option>
-          {uniqueDates.filter(date => date !== 'all').map((date, index) => (
-            <option key={index} value={date}>{date}</option>
-          ))}
-        </Form.Select>
-      </div>
-
+      <h2 className="mb-4">Upcoming Events</h2>
       {loading ? (
-        <div className="text-center py-4">
+        <div className="text-center">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
@@ -57,46 +36,28 @@ export default function EventsList() {
         <div className="alert alert-danger">{error}</div>
       ) : (
         <Row className="g-4">
-          {filteredEvents.map((event) => (
-            <Col md={6} key={event.id}>
+          {events.map((event) => (
+            <Col key={event.id} md={6} lg={4}>
               <Card className="h-100 border-0 shadow-sm hover-card">
                 {event.image && (
-                  <div className="position-relative">
-                    <Card.Img 
-                      variant="top" 
-                      src={event.image}
-                      alt={event.title}
-                      style={{ 
-                        height: '200px', 
-                        objectFit: 'cover',
-                        borderTopLeftRadius: 'calc(0.375rem - 1px)',
-                        borderTopRightRadius: 'calc(0.375rem - 1px)'
-                      }}
-                    />
-                    <div 
-                      className="position-absolute top-0 end-0 m-2"
-                      style={{ zIndex: 1 }}
-                    >
-                      <Badge 
-                        bg="primary" 
-                        style={{ backgroundColor: '#660ff1' }}
-                      >
-                        ${event.price}
-                      </Badge>
-                    </div>
-                  </div>
+                  <Card.Img 
+                    variant="top" 
+                    src={event.image}
+                    alt={event.title}
+                    style={{ height: '200px', objectFit: 'cover' }}
+                  />
                 )}
                 <Card.Body>
-                  <Badge 
-                    bg="primary" 
-                    className="mb-3"
-                    style={{ backgroundColor: '#660ff1' }}
-                  >
-                    {event.category}
-                  </Badge>
-                  <h3 className="h4 mb-3">{event.title}</h3>
-                  <p className="text-muted mb-4">{event.description}</p>
+                  <div className="d-flex justify-content-between align-items-start mb-3">
+                    <Badge bg="primary" style={{ backgroundColor: '#660ff1' }}>
+                      {event.category}
+                    </Badge>
+                    <h5 className="text-primary mb-0">${event.price}</h5>
+                  </div>
                   
+                  <h4 className="mb-3">{event.title}</h4>
+                  <p className="text-muted mb-4">{event.description}</p>
+
                   <div className="d-flex flex-column gap-2 mb-4">
                     <div className="d-flex align-items-center gap-2">
                       <FaCalendar style={{ color: '#660ff1' }} />
@@ -112,16 +73,17 @@ export default function EventsList() {
                     </div>
                     <div className="d-flex align-items-center gap-2">
                       <FaUsers style={{ color: '#660ff1' }} />
-                      <span>{event.spotsLeft} spots left</span>
+                      <span>{event.spots_left} spots left</span>
                     </div>
                   </div>
 
-                  <div className="d-flex align-items-center justify-content-between">
+                  <div className="d-flex justify-content-between align-items-center mt-auto">
                     <small className="text-muted">
                       Presented by: {event.presenter}
                     </small>
                     <Button 
-                      variant="primary" 
+                      variant="primary"
+                      size="sm"
                       style={{ backgroundColor: '#660ff1', border: 'none' }}
                     >
                       Register Now

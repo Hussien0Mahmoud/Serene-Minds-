@@ -2,6 +2,20 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8000';
 
+// Add request interceptor
+axios.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
 // Therapist endpoints
 export const therapistApi = {
   getAllTherapists: () => axios.get(`${BASE_URL}/api/therapists`),
@@ -9,50 +23,44 @@ export const therapistApi = {
   getTherapistById: (id) => axios.get(`${BASE_URL}/api/therapists/${id}`),
   
   createTherapist: (data) => {
-    const newTherapist = {
-      ...data,
-      id: Date.now().toString(),
-      role: "therapist",
-      rating: 0,
-      reviews: 0,
-      image: `https://ui-avatars.com/api/?name=${data.name.replace(/ /g, '+')}`,
-      password: "123456",
-      schedule: {
-        Monday: [],
-        Tuesday: [],
-        Wednesday: [],
-        Thursday: [],
-        Friday: [],
-        Saturday: [],
-        Sunday: []
-      },
-      education: data.education || [],
-      languages: data.languages || [],
-      specializations: data.specializations || [],
-      about: data.about || `Experienced ${data.specialty} with ${data.experience} of experience`,
-      price: data.price || 0,
-      availability: data.availability || false
-    };
-    return axios.post(`${BASE_URL}/api/therapists`, newTherapist);
+    return axios.post(`${BASE_URL}/api/therapists/`, {
+      user_id: data.user_id,
+      specialty: data.specialty,
+      experience: data.experience,
+      availability: data.availability,
+      price: data.price,
+      languages: data.languages,
+      specializations: data.specializations,
+      education: data.education,
+      about: data.about,
+      time_slots: data.time_slots
+    });
   },
   
   updateTherapist: (id, data) => {
-    const updatedTherapist = {
-      ...data,
-      image: data.image || `https://ui-avatars.com/api/?name=${data.name.replace(/ /g, '+')}`,
-      education: data.education || [],
-      languages: data.languages || [],
-      specializations: data.specializations || [],
-      price: data.price || 0,
-      availability: data.availability || false
+    const formData = {
+      user: {
+        username: data.name,
+        email: data.email,
+        profile_image: data.image || '',
+      },
+      specialty: data.specialty,
+      experience: data.experience,
+      availability: data.availability,
+      price: data.price,
+      languages: data.languages,
+      specializations: data.specializations,
+      education: data.education,
+      about: data.about,
+      time_slots: data.schedule
     };
-    return axios.patch(`${BASE_URL}/api/therapists/${id}`, updatedTherapist);
+    return axios.put(`${BASE_URL}/api/therapists/${id}/`, formData);
   },
   
   updateTherapistSchedule: (id, updatedSchedule) => 
     axios.patch(`${BASE_URL}/api/therapists/${id}`, { schedule: updatedSchedule }),
 
-  deleteTherapist: (id) => axios.delete(`${BASE_URL}/api/therapists/${id}`)
+  deleteTherapist: (id) => axios.delete(`${BASE_URL}/api/therapists/${id}/`)
 };
 
 // Appointment endpoints

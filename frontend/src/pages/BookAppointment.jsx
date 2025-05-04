@@ -3,7 +3,6 @@ import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaArrowLeft, FaCreditCard, FaPaypal } from 'react-icons/fa';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { appointmentApi } from '../api/appointmentApi';
 import { addAppointment } from '../store/slices/appointmentSlice';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -38,57 +37,67 @@ export default function BookAppointment() {
     setError(null);
 
     try {
-      // Create new appointment
+      // Format the price to have exactly 2 decimal places
+      const totalAmount = parseFloat((doctor?.price || 0) + 10).toFixed(2);
+
       const appointmentData = {
-        id: Date.now().toString(),
-        userId: currentUser.id,
-        therapistId: doctor.id,
+        user: currentUser.id,
+        therapist: doctor.id,
         date: selectedDate,
         time: selectedTime,
-        status: "Confirmed",
+        status: "Pending",
         type: "Video Call",
         notes: formData.message,
         duration: 60,
-        payment: {
-          amount: doctor.price + 10,
+        payment_data: {
+          amount: totalAmount, // Using formatted amount
           status: "Paid",
-          method: formData.paymentMethod
+          method: formData.paymentMethod,
+          transaction_id: Date.now().toString()
         }
       };
 
-      // Update doctor's schedule - keep the time but mark it as booked
-      const updatedSchedule = { ...doctor.schedule };
-      // Instead of filtering out the booked time, we keep it
-      // The booked status is tracked through the appointments array
-
-      // Save appointment to db.json
-      const appointmentResponse = await appointmentApi.createAppointment(appointmentData);
+      const token = localStorage.getItem('access_token');
+      const appointmentResponse = await axios.post(
+        'http://localhost:8000/api/appointments/',
+        appointmentData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       
-      // Update Redux store
+      // Update Redux store with the response data
       dispatch(addAppointment(appointmentResponse.data));
 
       // Show success message
       await Swal.fire({
         icon: 'success',
         title: 'Success!',
-        text: 'Your appointment has been sent successfully!',
+        text: 'Your appointment has been booked successfully!',
         confirmButtonColor: '#660ff1'
       });
       
       // Navigate back to doctor's page
-      setTimeout(() => {
-        navigate(`/doctor/${appointmentData.therapistId}`);
-      }, 500);
+      navigate(`/doctor/${doctor.id}`);
 
     } catch (err) {
-      setError('Failed to book appointment. Please try again.');
       console.error('Error booking appointment:', err);
       
-      // Show error message using sweet alert
+      // Improved error message handling for validation errors
+      const errorMessage = err.response?.data?.payment_data?.amount?.[0] || 
+                          err.response?.data?.detail || 
+                          Object.values(err.response?.data || {}).flat().join('\n') ||
+                          'Failed to book appointment. Please try again.';
+      
+      setError(errorMessage);
+      
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
-        text: 'Failed to book appointment. Please try again.',
+        title: 'Booking Failed',
+        text: errorMessage,
         confirmButtonColor: '#660ff1'
       });
     } finally {
@@ -306,16 +315,16 @@ export default function BookAppointment() {
                   <div className="mt-4">
                     <div className="d-flex justify-content-between mb-2">
                       <span>Session Fee</span>
-                      <span>${doctor?.price || 120}</span>
+                      <span>${parseFloat(doctor?.price || 0).toFixed(2)}</span>
                     </div>
                     <div className="d-flex justify-content-between mb-2">
                       <span>Service Fee</span>
-                      <span>$10</span>
+                      <span>$10.00</span>
                     </div>
                     <hr />
                     <div className="d-flex justify-content-between mb-4">
                       <strong>Total</strong>
-                      <strong>${(doctor?.price || 120) + 10}</strong>
+                      <strong>${parseFloat((doctor?.price || 0) + 10).toFixed(2)}</strong>
                     </div>
                   </div>
 
