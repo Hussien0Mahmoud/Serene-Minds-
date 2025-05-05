@@ -26,7 +26,6 @@ export default function AdminDashboard() {
 
       const { stats: adminStats, upcoming_events } = response.data;
 
-      // Transform the stats data
       setStats([
         {
           title: "Total Therapists",

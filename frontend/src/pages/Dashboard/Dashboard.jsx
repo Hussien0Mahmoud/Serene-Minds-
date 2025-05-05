@@ -45,7 +45,6 @@ export default function Dashboard() {
             <Routes>
               <Route path="/" element={renderDashboard()} />
               
-              {/* Admin Routes */}
               {currentUser.role === 'admin' && (
                 <>
                   <Route path="/therapists" element={<ManageTherapists />} />
@@ -56,7 +55,6 @@ export default function Dashboard() {
                 </>
               )}
 
-              {/* Therapist Routes */}
               {currentUser.role === 'therapist' && (
                 <>
                   <Route path="/appointments" element={<AppointmentsList />} />
@@ -66,7 +64,6 @@ export default function Dashboard() {
                 </>
               )}
 
-              {/* User Routes */}
               {currentUser.role === 'user' && (
                 <>
                   <Route path="/appointments" element={<AppointmentsList />} />

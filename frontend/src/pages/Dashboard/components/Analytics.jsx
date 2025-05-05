@@ -121,7 +121,6 @@ export default function Analytics() {
         ))}
       </Row>
 
-      {/* Additional analytics visualizations can be added here */}
     </Container>
   );
 }

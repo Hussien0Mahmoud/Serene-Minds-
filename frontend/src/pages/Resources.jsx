@@ -209,10 +209,9 @@ export default function Resources() {
                   </div>
                   
                   <Card.Body className="d-flex flex-column flex-grow-1">
-                    {/* Title - Common for both */}
+
                     <h5 style={{ color: colorPalette.text.dark }}>{resource.title}</h5>
 
-                    {/* Category Badge - Common for both */}
                     <div className="mb-2">
                       <Badge 
                         style={{ 
@@ -224,19 +223,19 @@ export default function Resources() {
                       </Badge>
                     </div>
 
-                    {/* Description - Common for both */}
+
                     <p className="small mb-3" style={{ color: colorPalette.text.dark }}>
                       {resource.description}
                     </p>
 
                     <div className="d-flex flex-column gap-2 mb-3">
-                      {/* Created By - Common for both */}
+
                       <div className="d-flex justify-content-between">
                         <small style={{ color: colorPalette.base }}>
                           <strong>{resource.type === 'Video' ? 'Created by:' : 'Author:'}</strong> {resource.author}
                         </small>
                         
-                        {/* Duration - Only for Videos */}
+
                         {resource.type === 'Video' && resource.duration && (
                           <small style={{ color: colorPalette.text.dark }}>
                             <strong>Duration:</strong> {resource.duration} min
@@ -244,7 +243,6 @@ export default function Resources() {
                         )}
                       </div>
 
-                      {/* Tags - Common for both */}
                       <div className="mt-2">
                         <div className="d-flex flex-wrap gap-1">
                           {resource.tags?.split(',').map((tag, index) => (
@@ -262,7 +260,6 @@ export default function Resources() {
                       </div>
                     </div>
 
-                    {/* Action Button */}
                     <Button 
                       variant="primary" 
                       className="w-100 mt-auto"

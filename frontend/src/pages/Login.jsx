@@ -35,7 +35,6 @@ export default function Login() {
       // Save user data to Redux and localStorage
       dispatch(loginSuccess(user));
 
-      // Navigate to home page
       navigate('/');
     } catch (err) {
       dispatch(setError(err.message));

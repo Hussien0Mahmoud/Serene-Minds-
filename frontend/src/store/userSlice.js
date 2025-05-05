@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Load user from localStorage
 const loadUser = () => {
   try {
     const serializedUser = localStorage.getItem('user');
@@ -41,7 +40,7 @@ const userSlice = createSlice({
       state.currentUser = null;
       state.isAuthenticated = false;
       state.error = null;
-      // Clear user data from localStorage
+
       localStorage.removeItem('user');
     },
     clearError: (state) => {

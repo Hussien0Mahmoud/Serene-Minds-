@@ -15,11 +15,8 @@ export default function DashboardHeader() {
 
   const handleLogout = () => {
     try {
-      // Clear user data from Redux
       dispatch(logoutSuccess());
-      // Clear localStorage
       localStorage.removeItem('user');
-      // Navigate to home page
       navigate('/');
     } catch (error) {
       console.error('Logout error:', error);

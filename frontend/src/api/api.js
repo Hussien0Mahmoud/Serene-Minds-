@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8000';
 
-// Add request interceptor
 axios.interceptors.request.use(
   config => {
     const token = localStorage.getItem('access_token');
@@ -16,7 +15,6 @@ axios.interceptors.request.use(
   }
 );
 
-// Therapist endpoints
 export const therapistApi = {
   getAllTherapists: () => axios.get(`${BASE_URL}/api/therapists`),
   
@@ -63,7 +61,6 @@ export const therapistApi = {
   deleteTherapist: (id) => axios.delete(`${BASE_URL}/api/therapists/${id}/`)
 };
 
-// Appointment endpoints
 export const appointmentApi = {
   getAllAppointments: () => axios.get(`${BASE_URL}/api/appointments`),
   getAppointmentById: (id) => axios.get(`${BASE_URL}/api/appointments/${id}`),
@@ -72,7 +69,6 @@ export const appointmentApi = {
   deleteAppointment: (id) => axios.delete(`${BASE_URL}/api/appointments/${id}`)
 };
 
-// User endpoints
 export const userApi = {
   getUserProfile: (id) => axios.get(`${BASE_URL}/api/users/${id}`),
   updateUserProfile: (id, data) => axios.put(`${BASE_URL}/api/users/${id}`, data),

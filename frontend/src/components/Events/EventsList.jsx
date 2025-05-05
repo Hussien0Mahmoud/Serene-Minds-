@@ -10,7 +10,7 @@ export default function EventsList({ filters }) {
 
   useEffect(() => {
     fetchEvents();
-  }, [filters]); // Re-fetch when filters change
+  }, [filters]); 
 
   const fetchEvents = async () => {
     try {
@@ -27,7 +27,6 @@ export default function EventsList({ filters }) {
       const response = await axios.get(`http://localhost:8000/api/events/?${params}`);
       const data = response.data.results || [response.data];
       
-      // Client-side filtering as backup
       const filteredEvents = data.filter(event => {
         const matchesSearch = !filters?.searchTerm || 
           event.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||

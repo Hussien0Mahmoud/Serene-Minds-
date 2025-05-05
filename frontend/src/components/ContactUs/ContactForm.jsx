@@ -10,7 +10,6 @@ export default function ContactForm() {
     <>
         <Container className="my-5">
           <Row className="g-4">
-            {/* Contact Form */}
             <Col md={7}>
               <Card className="shadow-lg border-0 p-4">
                 <Card.Body>
@@ -38,7 +37,6 @@ export default function ContactForm() {
               </Card>
             </Col>
     
-            {/* Contact Info */}
             <Col md={5}>
               <Card className="shadow-lg border-0 p-4 bg-light">
                 <Card.Body>

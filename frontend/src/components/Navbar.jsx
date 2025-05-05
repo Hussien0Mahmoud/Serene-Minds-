@@ -13,11 +13,11 @@ import "../assets/css/navbar/style.css";
 
 export default function Header() {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Add this line at the top
+  const navigate = useNavigate(); 
   const { currentUser, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    // Check localStorage on component mount
+
     const savedUser = localStorage.getItem("user");
     if (savedUser && !currentUser) {
       dispatch(loginSuccess(JSON.parse(savedUser)));
@@ -26,7 +26,7 @@ export default function Header() {
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
-    navigate("/"); // Add this line to redirect to home page
+    navigate("/");
   };
 
   return (

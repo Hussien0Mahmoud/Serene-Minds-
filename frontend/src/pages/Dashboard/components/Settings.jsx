@@ -46,7 +46,6 @@ export default function Settings() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Save settings logic here
     alert('Settings saved successfully!');
   };
 

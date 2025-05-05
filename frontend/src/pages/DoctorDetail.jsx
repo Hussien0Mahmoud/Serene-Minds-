@@ -33,12 +33,10 @@ export default function DoctorDetail() {
         if (doctorRes.data) {
           setDoctor(doctorRes.data);
           
-          // Filter appointments for this doctor
           const doctorAppointments = appointmentsRes.data.results.filter(
             app => app.therapist === parseInt(id) && app.status !== 'Cancelled'
           );
           
-          // Create array of booked slots
           const booked = doctorAppointments.map(app => `${app.date}-${app.time}`);
           setBookedSlots(booked);
         } else {
@@ -103,7 +101,7 @@ export default function DoctorDetail() {
   return (
     <div style={{ background: '#f8f9fa', minHeight: '100vh', paddingTop: '2rem' }}>
       <Container>
-        {/* Doctor Profile Card */}
+
         <Card 
           className="border-0 mb-4" 
           style={{ 
@@ -180,7 +178,6 @@ export default function DoctorDetail() {
           </Card.Body>
         </Card>
 
-        {/* About Section */}
         <Card 
           className="border-0 mb-4" 
           style={{ 
@@ -204,7 +201,6 @@ export default function DoctorDetail() {
           </Card.Body>
         </Card>
 
-        {/* Schedule Section */}
         <Card 
           className="border-0 mb-4" 
           style={{ 
@@ -240,7 +236,7 @@ export default function DoctorDetail() {
                   <div className="d-flex flex-wrap gap-2">
                     {doctor.time_slots && doctor.time_slots.length > 0 ? (
                       doctor.time_slots
-                        .filter(slot => slot.day === selectedDate) // Filter slots for selected day
+                        .filter(slot => slot.day === selectedDate) 
                         .map((slot) => {
                           const isBooked = isTimeSlotBooked(selectedDate, slot.time);
                           return (

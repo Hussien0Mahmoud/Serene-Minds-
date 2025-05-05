@@ -8,7 +8,6 @@ export default function EventsCalendar() {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
 
-  // Mock events data - replace with actual events
   const eventDates = {
     '2024-04-25': ['Group Therapy Session', 'Mindfulness Workshop'],
     '2024-04-26': ['Stress Management Seminar'],
@@ -17,7 +16,7 @@ export default function EventsCalendar() {
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
-    // Update events based on selected date
+
     const formattedDate = newDate.toISOString().split('T')[0];
     setEvents(eventDates[formattedDate] || []);
   };

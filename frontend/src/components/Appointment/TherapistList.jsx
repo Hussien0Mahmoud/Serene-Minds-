@@ -22,10 +22,9 @@ export default function TherapistList({ onViewSchedule }) {
     try {
       dispatch(setLoading(true));
       const response = await therapistApi.getAllTherapists();
-      // Extract results from paginated response
+
       const therapistsData = response.data.results || [];
       
-      // Transform the data to match component expectations
       const transformedData = therapistsData.map(therapist => ({
         id: therapist.id,
         name: therapist.user.username,
@@ -60,10 +59,6 @@ export default function TherapistList({ onViewSchedule }) {
     const specialties = new Set();
     therapists.forEach(therapist => {
       if (therapist.specialty) specialties.add(therapist.specialty);
-      if (therapist.specializations) {
-        (Array.isArray(therapist.specializations) ? therapist.specializations : [therapist.specializations])
-          .forEach(spec => specialties.add(spec));
-      }
     });
     return Array.from(specialties);
   };
@@ -71,8 +66,7 @@ export default function TherapistList({ onViewSchedule }) {
   const filteredTherapists = selectedSpecialty === 'all' 
     ? (Array.isArray(therapists) ? therapists : [])
     : (Array.isArray(therapists) ? therapists.filter(therapist => 
-        therapist.specializations?.includes(selectedSpecialty) || 
-        therapist.specialty?.toLowerCase().includes(selectedSpecialty.toLowerCase())
+        therapist.specialty === selectedSpecialty
       ) : []);
 
   return (
@@ -102,9 +96,10 @@ export default function TherapistList({ onViewSchedule }) {
       ) : (
         <Row className="g-4">
           {filteredTherapists.map((therapist) => (
-            <Col key={therapist.id} md={6} lg={4}>
-              <Card className="h-100 border-0 shadow-sm">
-                <Card.Body>
+            <Col key={therapist.id} md={6} lg={4} className="d-flex">
+              <Card className="h-100 border-0 shadow-sm w-100">
+                <Card.Body className="d-flex flex-column">
+
                   <div className="text-center mb-3">
                     <img
                       src={therapist.image || `https://ui-avatars.com/api/?name=${therapist.name}`}
@@ -121,36 +116,52 @@ export default function TherapistList({ onViewSchedule }) {
                     </div>
                   </div>
 
-                  <div className="mb-3">
-                    {therapist.specializations?.map((specialization, index) => (
-                      <Badge 
-                        key={index} 
-                        className="me-2 mb-2"
-                        style={{ backgroundColor: '#660ff1' }}
-                      >
-                        {specialization}
-                      </Badge>
-                    ))}
-                  </div>
+                  <div className="flex-grow-1">
+                    <div className="mb-3">
+                      {therapist.specializations?.map((specialization, index) => (
+                        <Badge 
+                          key={index} 
+                          className="me-2 mb-2"
+                          style={{ backgroundColor: '#6600f1' }}
+                        >
+                          {specialization}
+                        </Badge>
+                      ))}
+                    </div>
 
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <div className="text-end">
-                      <small className="text-muted d-block">Experience</small>
-                      <small className="text-success fw-bold">{therapist.experience}</small>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <div className="text-end">
+                        <small className="text-muted d-block">Experience
+                        <small className="text-success ms-3 fw-bold">{therapist.experience}</small></small>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="d-flex justify-content-between align-items-center">
-                    <span className="fw-bold">${therapist.price || 0}/session</span>
-                    <Link to={`/doctor/${therapist.id}`}>
-                      <Button 
-                        variant="outline-primary"
-                        style={{ borderColor: '#660ff1', color: '#660ff1' }}
-                      >
-                        <FaCalendarAlt className="me-2" />
-                        View Schedule
-                      </Button>
-                    </Link>
+                  <div className="mt-auto">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span className="fw-bold">${therapist.price || 0}/session</span>
+                      <Link to={`/doctor/${therapist.id}`}>
+                        <Button 
+                          variant="outline-primary"
+                          style={{ 
+                            borderColor: '#6600f1', 
+                            color: '#6600f1',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = '#6600f1';
+                            e.currentTarget.style.color = 'white';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                            e.currentTarget.style.color = '#6600f1';
+                          }}
+                        >
+                          <FaCalendarAlt className="me-2" />
+                          View Schedule
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </Card.Body>
               </Card>

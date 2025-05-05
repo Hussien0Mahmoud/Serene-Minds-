@@ -104,7 +104,7 @@ export default function ManageUsers() {
       };
 
       if (selectedUser.id) {
-        // Include password fields only if either is filled
+
         if (passwordFields.currentPassword || passwordFields.newPassword) {
           if (!passwordFields.currentPassword) {
             alert('Current password is required to change password');
@@ -119,7 +119,7 @@ export default function ManageUsers() {
         }
         await editUser(selectedUser.id, userData);
       } else {
-        // For new user, use single password field
+
         userData.password = selectedUser.password;
         await addNewUser(userData);
       }
@@ -383,7 +383,6 @@ export default function ManageUsers() {
             </Form.Group>
 
             {selectedUser?.id ? (
-              // Edit user - show both password fields
               <>
                 <Form.Group className="mb-3">
                   <Form.Label>Current Password</Form.Label>
@@ -418,7 +417,7 @@ export default function ManageUsers() {
                 </Form.Group>
               </>
             ) : (
-              // New user - show single password field
+              
               <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Form.Control

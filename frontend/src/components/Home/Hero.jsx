@@ -72,7 +72,6 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Main Image */}
               <div className="position-relative">
                 <img 
                   src="https://www.talktoangel.com/images/newsletter/TTA-O5QNLNBM/Mental%20Wellness%20Tips%20for%20Teachers_Inner.svg" 

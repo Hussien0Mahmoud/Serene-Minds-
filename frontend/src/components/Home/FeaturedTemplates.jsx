@@ -16,7 +16,7 @@ export default function FeaturedTemplates() {
       downloads: 1.2,
       tags: ["Responsive", "Bootstrap 5", "React"],
       features: ["Shopping Cart", "Product Gallery", "User Dashboard"],
-      accent: "#660ff1" // Primary brand color
+      accent: "#660ff1" 
     },
     {
       id: 2,
